@@ -5,7 +5,7 @@ export type TemplateInput = {
     id: string;
     label: string;
     placeholder: string;
-    type: "text" | "textarea" | "select";
+    type: "text" | "textarea" | "select" | "password";
     options?: string[];
 };
 
@@ -22,7 +22,34 @@ export const LOGIN_INPUTS: TemplateInput[] = [
         placeholder: "*******",
         type: "text",
     },
-]
+];
+
+export const BLOG_INPUTS: TemplateInput[] = [
+    {
+        id: "title",
+        label: "Titre de l'article",
+        placeholder: "titre",
+        type: "text",
+    },
+    {
+        id: "category",
+        label: "Catégorie",
+        placeholder: "Catégorie",
+        type: "text",
+    },
+    {
+        id: "image",
+        label: "Image",
+        placeholder: "Image mis en avant",
+        type: "text",
+    },
+    {
+        id: "description",
+        label: "Description",
+        placeholder: "This is the description of the blog",
+        type: "text",
+    },
+];
 
 export const JOB_INPUTS: TemplateInput[] = [
     {
@@ -119,16 +146,16 @@ export const USER_CONFIG_INPUTS: TemplateInput[] = [
         type: "text",
     },
     {
-        id: "address",
-        label: "Addresse",
-        placeholder: "Benin, Cotonou",
+        id: "title",
+        label: "Titre",
+        placeholder: "Manager",
         type: "text",
     },
     {
         id: "password",
         label: "Mot de passe",
         placeholder: "*******",
-        type: "text",
+        type: "password",
     },
 ];
 

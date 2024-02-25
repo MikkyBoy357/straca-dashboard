@@ -1,11 +1,11 @@
 import React, { ReactElement } from 'react'
 import DashboardLayout from '../layout'
-import { JobListComponent } from '@/components/dashboard_components/JobList'
+import { OrderListComponent } from '@/components/dashboard_components/OrderList'
 import { useRouter } from 'next/router';
-import JobForm from './JobForm';
+import OrderForm from './OrderForm';
 
 
-const JobsPage = () => {
+const OrdersPage = () => {
   const router = useRouter();
   const { action } = router.query; // Access action query parameter
   console.log(action);
@@ -13,15 +13,15 @@ const JobsPage = () => {
   return (
     <>
       {action === 'new' ? (
-        <JobForm /> // Render JobForm if action is "new"
+        <OrderForm /> // Render JobForm if action is "new"
       ) : (
-        <JobListComponent /> // Render JobListComponent otherwise
+        <OrderListComponent /> // Render JobListComponent otherwise
       )}
     </>
   )
 }
 
-JobsPage.getLayout = function getLayout(page: ReactElement) {
+OrdersPage.getLayout = function getLayout(page: ReactElement) {
   return (
     <DashboardLayout>
       {page}
@@ -29,4 +29,4 @@ JobsPage.getLayout = function getLayout(page: ReactElement) {
   )
 }
 
-export default JobsPage
+export default OrdersPage

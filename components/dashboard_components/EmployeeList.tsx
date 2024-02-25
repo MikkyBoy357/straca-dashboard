@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 // import { AddClientModal } from "./AddClientModal";
 import { BaseUrl } from "@/constants/templates";
+import router from "next/router";
 // import DeleteCountryModal from "./SettingComponents/SettingPopups/DeleteCountryModal";
 
 export interface Employee {
@@ -108,12 +109,14 @@ export const EmployeeListComponent = () => {
         <div className="bg-white h-full pl-5 pr-16 pt-12 flex flex-col text-black">
             <div className="flex flex-row justify-between items-center">
                 <p className="mb-3 font-semibold text-2xl">Gestion des collaborateurs</p>
-                <div onClick={toggleShowModal} className="inline-flex h-[48px] items-center justify-center gap-[8px] p-[16px] relative bg-[#4763e4] rounded-[10px]">
-                    <div className="relative w-fit mt-[-4.00px] mb-[-2.00px] [font-family:'Inter-Regular',Helvetica] font-normal text-white text-[18px] tracking-[0] leading-[normal]">
+                <button onClick={toggleShowModal} className="inline-flex h-[48px] items-center justify-center gap-[8px] p-[16px] relative bg-[#3D75B0] rounded-md">
+                    <div onClick={() => {
+                        router.push("/dashboard/partners?action=new")
+                    }} className="relative w-fit mt-[-4.00px] mb-[-2.00px] [font-family:'Inter-Regular',Helvetica] font-normal text-white text-[18px] tracking-[0] leading-[normal]">
                         Ajouter un collaborateur
                     </div>
                     <i className="fa-solid fa-plus ml-1 text-white"></i>
-                </div>
+                </button>
             </div>
             <div className="pt-5">
                 <div className="px-4 py-3 pb-10 bg-[#FAFBFF] rounded-[12px]">
