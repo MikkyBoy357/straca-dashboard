@@ -1,16 +1,92 @@
 import { renderInputField } from '@/components/InputComponents/InputComponents'
+import { Job } from '@/components/dashboard_components/JobList';
+import { POST, PUT } from '@/constants/fetchConfig';
 import { JOB_INPUTS } from '@/constants/templates'
+import { Toast } from '@/constants/toastConfig';
 import router from 'next/router'
 import React, { useState } from 'react'
-import ReactQuill from 'react-quill';
+// Use dynamic for lazy loading ReactQuill
+const ReactQuill = dynamic(() => import('react-quill'), { ssr: false });
 import 'react-quill/dist/quill.snow.css';
+import dynamic from "next/dynamic";
 
 const JobForm = () => {
     const [post, setPost] = useState("");
     const [salary, setSalary] = useState("");
     const [location, setLocation] = useState("");
-    const [type, setType] = useState("");
+    const [contractType, setContractType] = useState("");
     const [description, setDescription] = useState("");
+
+    // Attention
+    const [isChanged, setIsChanged] = useState(false);
+    const [isModify, setIsModify] = useState(false);
+    const [selectedItem, setSelectedItem] = useState<Job>({
+        _id: '',
+        post: '',
+        contractType: '',
+        location: '',
+        description: '',
+        createdAt: '',
+        salary: 500000
+    });
+
+    // Function to add job
+    const addJob = async () => {
+        try {
+            const newJob = {
+                post: post,
+                salary: Number(salary),
+                location: location,
+                contractType: contractType,
+                description: description,
+                status: "test",
+            };
+
+            // Perform validation to check if all variables are not empty
+            if (
+                post.trim() === "" ||
+                salary?.trim() === "" ||
+                location?.trim() === "" ||
+                contractType?.trim() === "" ||
+                description.trim() === ""
+            ) {
+                alert("Please fill in all fields.");
+                return;
+            }
+
+            var response;
+            if (!isModify) {
+
+                response = await POST(`/jobs`, newJob);
+            } else {
+                if (!isChanged) {
+                    return alert("Values were not changed");
+                }
+
+                response = await PUT(`/jobs/${selectedItem._id}`, newJob);
+            }
+
+            console.log(`Job ${isModify ? "edited" : "added"} successfully!`);
+            router.back();
+            Toast.fire({
+                icon: "success",
+                title: `Job ${isModify ? "edited" : "added"} successfully!`,
+            });
+            // router.reload();
+
+            // Clear form fields after successful addition
+            // setPrice('');
+            // setTypeColis('');
+            // setTransportType('');
+            // setUnit('');
+            // setDescription('');
+            // setQuantity('');
+        } catch (error) {
+            console.error("Error adding job:", error);
+            alert(error);
+            // Handle errors
+        }
+    };
 
     return (
         <div className="bg-white h-full pl-5 pr-16 pt-12 flex flex-col text-black">
@@ -35,16 +111,16 @@ const JobForm = () => {
                         </div>
                         <div className="flex w-full justify-between items-start gap-[12px] relative flex-[0_0_auto]">
                             {renderInputField(JOB_INPUTS[2], location, (e) => setLocation(e.target.value))}
-                            {renderInputField(JOB_INPUTS[3], type, (e) => setType(e.target.value))}
+                            {renderInputField(JOB_INPUTS[3], contractType, (e) => setContractType(e.target.value))}
                         </div>
                         <div className="flex w-full justify-between items-start gap-[12px] relative flex-[0_0_auto]">
                             <div className='w-full'>
                                 <p className='mb-2'>{JOB_INPUTS[4].label}</p>
-                                <ReactQuill className='w-full h-[475px] mb-10' theme="snow" placeholder="Write job description" onChange={setDescription} />
+                                {<ReactQuill className='w-full h-[475px] mb-10' theme="snow" placeholder="Write job description" onChange={setDescription} />}
                             </div>
                         </div>
                         <center>
-                            <button onClick={() => { }} className="px-10 py-2 bg-[#3D75B0] text-white rounded-md">
+                            <button onClick={addJob} className="px-10 py-2 bg-[#3D75B0] text-white rounded-md">
                                 Enregistrer
                             </button>
                         </center>

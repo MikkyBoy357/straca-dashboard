@@ -1,3 +1,5 @@
+import { Permission } from "@/components/dashboard_components/users-permissions/UsersPermissionsList";
+
 // export const BaseUrl: string = 'http://18.130.232.167:3000';
 export const BaseUrl: string = 'http://localhost:3001';
 
@@ -20,7 +22,7 @@ export const LOGIN_INPUTS: TemplateInput[] = [
         id: "password",
         label: "Mot de passe",
         placeholder: "*******",
-        type: "text",
+        type: "password",
     },
 ];
 
@@ -161,69 +163,137 @@ export const USER_CONFIG_INPUTS: TemplateInput[] = [
 
 export const ADD_ORDER_INPUTS: TemplateInput[] = [
     {
-        id: "trackingId",
-        label: "Tracking ID",
-        placeholder: "242562728",
+        id: "startDate",
+        label: "Date début",
+        placeholder: "08/10",
         type: "text",
     },
     {
-        id: "typeColis",
-        label: "Type de colis",
-        placeholder: "Batterie",
-        type: "select",
+        id: "serviceType",
+        label: "Type de service ou produit",
+        placeholder: "Transport de gravas",
+        // type: "select",
+        type: "text",
     },
     {
-        id: "transportType",
-        label: "Type de transport",
+        id: "vehicle",
+        label: "Véhicule de transport",
         placeholder: "BATEAU",
-        type: "select",
+        // type: "select",
+        type: "text",
     },
     {
-        id: "client",
-        label: "Client",
-        placeholder: "Didier",
-        type: "select",
+        id: "endDate",
+        label: "Date de fin",
+        placeholder: "08/12",
+        type: "text",
+    },
+    {
+        id: "weight",
+        label: "Poids (kg)",
+        placeholder: "5kg",
+        type: "text",
+    },
+    {
+        id: "volume",
+        label: "Volume (m3)",
+        placeholder: "1m3",
+        type: "text",
+    },
+    {
+        id: "price",
+        label: "Tarif (XOF)",
+        placeholder: "10500",
+        type: "text",
+    },
+
+    {
+        id: "status",
+        label: "Statut de la commande",
+        placeholder: "En cours",
+        // type: "select",
+        type: "text",
     },
     {
         id: "description",
         label: "Description",
-        placeholder: "Alexander",
+        placeholder: "Transport de gravas",
+        type: "text",
+    },
+    // Order Client fields
+    {
+        id: "client",
+        label: "Client",
+        placeholder: "Veridian Junction",
+        // type: "select",
         type: "text",
     },
     {
-        id: "unit",
-        label: "Unité",
-        placeholder: "",
-        type: "select",
-    },
-    {
-        id: "pays",
-        label: "Pays de destination",
-        placeholder: "Rwanda",
-        type: "select",
-    },
-    {
-        id: "quantity",
-        label: "Quantité",
-        placeholder: "10",
+        id: "countryCode",
+        label: "Country code",
+        placeholder: "+229",
         type: "text",
     },
     {
-        id: "ville",
-        label: "Ville",
-        placeholder: "Cotonou",
+        id: "phone",
+        label: "Phone",
+        placeholder: "99249702",
         type: "text",
     },
     {
-        id: "status",
-        label: "Statut",
-        placeholder: "Actif",
-        type: "select",
+        id: "email",
+        label: "Email",
+        placeholder: "michaelolusegun357@gmail.com",
+        type: "text",
+    },
+    // Address de départ
+    {
+        id: "siteAddress",
+        label: "Adresse de départ du site",
+        placeholder: "Rue poisson",
+        type: "text",
     },
     {
-        id: "specialNote",
-        label: "Note Spéciale",
-        placeholder: "Don't get in the mix",
+        id: "searchKeyword1",
+        label: "Search for a geographical position",
+        placeholder: "Placeholder",
+        type: "text",
+    },
+    {
+        id: "lat1",
+        label: "Latitude",
+        placeholder: "Placeholder",
+        type: "text",
+    },
+    {
+        id: "lon1",
+        label: "Longitude",
+        placeholder: "Placeholder",
+        type: "text",
+    },
+    // Address du client
+    {
+        id: "clientAddress",
+        label: "Adresse du client",
+        placeholder: "Rue poisson",
+        type: "text",
+    },
+    {
+        id: "searchKeyword2",
+        label: "Search for a geographical position",
+        placeholder: "Placeholder",
+        type: "text",
+    },
+    {
+        id: "lat2",
+        label: "Latitude",
+        placeholder: "Placeholder",
+        type: "text",
+    },
+    {
+        id: "lon2",
+        label: "Longitude",
+        placeholder: "Placeholder",
         type: "text",
     },
 ];
@@ -281,3 +351,45 @@ export const ADD_TRANSPORT_INPUTS: TemplateInput[] = [
         type: "text",
     },
 ];
+
+export const validPermissionNames = [
+    "employee",
+    "client",
+    "commande",
+    "country",
+    "measureUnit",
+    "packageType",
+    "pricing",
+    "product",
+    "transportType",
+    "user",
+    "permission",
+];
+
+export function checkPermissionNameToDisplay(permission: Permission) {
+    let name = "";
+
+    if (permission.name === "employee") name = "employé";
+    else if (permission.name === "country") name = "pays";
+    else if (permission.name === "measureUnit") name = "unité-de-mesure";
+    else if (permission.name === "packageType") name = "type-de-packet";
+    else if (permission.name === "pricing") name = "tarification";
+    else if (permission.name === "product") name = "produit";
+    else if (permission.name === "transportType") name = "type-de-transport";
+    else if (permission.name === "user") name = "utilisateur";
+    else name = permission.name;
+
+    return name;
+}
+
+export function checkPermissionActionToDisplay(permission: Permission) {
+    let action = "";
+
+    if (permission.action === "update") action = "modifier";
+    else if (permission.action === "delete") action = "supprimer";
+    else if (permission.action === "read") action = "lire";
+    else if (permission.action === "create") action = "créer";
+    else action = permission.action;
+
+    return action;
+}

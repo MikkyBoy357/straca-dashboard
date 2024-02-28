@@ -1,10 +1,12 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 // import { AddClientModal } from "./AddClientModal";
 import { BaseUrl } from "@/constants/templates";
-import router from "next/router";
+import router, { useRouter } from "next/router";
+import { GET } from "@/constants/fetchConfig";
+import { AddOrderModal } from "./AddOrderModal";
 // import DeleteCountryModal from "./SettingComponents/SettingPopups/DeleteCountryModal";
 
-export interface Blog {
+export interface Commande {
     _id: string;
     operation: string;
     details: string;
@@ -15,10 +17,19 @@ export interface Blog {
 }
 
 export const OrderListComponent = () => {
+    const router = useRouter();
+    const [loading, setLoading] = useState(false);
+    const [showDeleteModal, setShowDeleteModal] = useState(false);
+    const [itemId, setItemId] = useState("");
+
+    const toggleShowDeleteModal = () => {
+        setShowDeleteModal(!showDeleteModal);
+    };
 
     const [modify, setModify] = useState(false);
+    const [searchText, setSearchText] = useState("");
 
-    const [selectedEmployee, setSelectedEmployee] = useState<Blog>();
+    const [selectedOrder, setSelectedOrder] = useState<Commande>();
     const [showModal, setShowModal] = useState(false);
 
     const toggleShowModal = () => {
@@ -26,30 +37,21 @@ export const OrderListComponent = () => {
         if (showModal) { setModify(false) }
     }
 
-    const handleModify = (item: Blog) => {
+    const handleModify = (item: Commande) => {
         setModify(true)
-        setSelectedEmployee(item)
+        setSelectedOrder(item)
         toggleShowModal()
     }
 
-    const [employeesData, setEmployeesData] = useState<Blog[]>([
-        { _id: "0", operation: "Location 100 MAN", details: "...", contact: "Bob BOKO bob@straca.com", start: "23 decembre 2019", end: "08 JANVIER 2023", status: "En cours" },
-        { _id: "1", operation: "Achat 2000 T gravier", details: "...", contact: "Floyd ADEOTI floyd@straca.com", start: "07 mars 2021", end: "08 JANVIER 2023", status: "Liverer", },
-        { _id: "2", operation: "Huile HAFA", details: "...", contact: "Ronald BIGNON ronald@straca.com", start: "23 septembre 2022", end: "08 JANVIER 2023", status: "En cours", },
-        { _id: "3", operation: "Location Volvo 240", details: "...", contact: "Marvin AKO marvin@straca.com", start: "25 AOUT 2022", end: "08 JANVIER 2023", status: "Livrer", },
-    ]);
+    // const [employeesData, setEmployeesData] = useState<Commande[]>([
+    //     { _id: "0", operation: "Location 100 MAN", details: "...", contact: "Bob BOKO bob@straca.com", start: "23 decembre 2019", end: "08 JANVIER 2023", status: "En cours" },
+    //     { _id: "1", operation: "Achat 2000 T gravier", details: "...", contact: "Floyd ADEOTI floyd@straca.com", start: "07 mars 2021", end: "08 JANVIER 2023", status: "Liverer", },
+    //     { _id: "2", operation: "Huile HAFA", details: "...", contact: "Ronald BIGNON ronald@straca.com", start: "23 septembre 2022", end: "08 JANVIER 2023", status: "En cours", },
+    //     { _id: "3", operation: "Location Volvo 240", details: "...", contact: "Marvin AKO marvin@straca.com", start: "25 AOUT 2022", end: "08 JANVIER 2023", status: "Livrer", },
+    // ]);
 
-    useEffect(() => {
-        fetchEmployeesData()
-    }, [])
 
-    const [showDeleteModal, setShowDeleteModal] = useState(false);
-
-    const toggleShowDeleteModal = () => {
-        setShowDeleteModal(!showDeleteModal);
-    }
-
-    const [itemId, setItemId] = useState("")
+    const [commandesData, setCommandesData] = useState<Commande[]>([]);
 
     const handleSetItemId = (id: string) => {
         setItemId(id)
@@ -58,7 +60,7 @@ export const OrderListComponent = () => {
     const handleDeleteItem = async () => {
         try {
             console.log(`Deleting employee with ID: ${itemId}`);
-            const response = await fetch(`${BaseUrl}/employees/${itemId}`, {
+            const response = await fetch(`${BaseUrl}/commandes/${itemId}`, {
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json',
@@ -80,36 +82,31 @@ export const OrderListComponent = () => {
         }
     };
 
-
-    // Function to fetch employees data
-    const fetchEmployeesData = async () => {
+    // Function to fetch commandes data
+    const fetchCommandesData = useCallback(async () => {
         try {
-            const response = await fetch(`${BaseUrl}/employees`, {
-                method: "GET",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-            });
+            const response = await GET(
+                `/commandes${searchText.length > 0 ? `?search=${searchText}` : ""}`,
+            );
 
-            if (!response.ok) {
-                throw new Error("Failed to fetch data");
-            }
-
-            const data: Blog[] = await response.json();
+            const data: Commande[] = response;
             // Set the fetched data into state
-            setEmployeesData(data);
-
+            setCommandesData(data);
         } catch (error) {
             console.error("Error fetching data:", error);
             // Handle errors
         }
-    };
+    }, [searchText]);
+
+    useEffect(() => {
+        fetchCommandesData().finally(() => setLoading(false));
+    }, [fetchCommandesData]);
 
     return (
         <div className="bg-white h-full pl-5 pr-16 pt-12 flex flex-col text-black">
             <div className="flex flex-row justify-between items-center">
                 <p className="mb-3 font-semibold text-2xl">Gestion des commandes</p>
-                <button onClick={toggleShowModal} className="inline-flex h-[48px] items-center justify-center gap-[8px] p-[16px] relative bg-[#3D75B0] rounded-md">
+                <button onClick={() => {}} className="inline-flex h-[48px] items-center justify-center gap-[8px] p-[16px] relative bg-[#3D75B0] rounded-md">
                     <div onClick={() => {
                         router.push("/dashboard/orders?action=new")
                     }} className="relative w-fit mt-[-4.00px] mb-[-2.00px] [font-family:'Inter-Regular',Helvetica] font-normal text-white text-[18px] tracking-[0] leading-[normal]">
@@ -124,11 +121,19 @@ export const OrderListComponent = () => {
                         <div className="flex flex-row justify-between">
                             <p className="mb-3 font-semibold text-2xl">Liste des commandes</p>
                         </div>
-                        <div className="flex w-[50%] items-start gap-[8px] px-[20px] py-[16px] relative bg-white rounded-[10px] border border-solid border-[#4763e4]">
-                            <i className="fa-solid fa-magnifying-glass"></i>
-                            <p className="relative w-fit [font-family:'Inter-Regular',Helvetica] font-normal text-gray-400 text-[14px] tracking-[0] leading-[normal]">
-                                Vous cherchez quel blog ...
-                            </p>
+                        <div className="relative w-[50%]">
+                            <div className="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
+                                <i className="fa-solid fa-magnifying-glass"></i>
+                            </div>
+                            <input
+                                type="search"
+                                id="default-search"
+                                className="block w-full px-4 py-3 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-white focus:ring-blue-500 focus:border-blue-500 "
+                                placeholder="Recherche ..."
+                                onChange={(e) => {
+                                    setSearchText(e.target.value);
+                                }}
+                            />
                         </div>
                     </div>
                     {/* Table */}
@@ -148,7 +153,7 @@ export const OrderListComponent = () => {
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {employeesData.map((item) => (
+                                        {commandesData.map((item) => (
                                             <tr key={item._id}>
                                                 <td className="py-2 px-4 border-b">{item.operation}</td>
                                                 <td className="py-2 px-4 border-b">{item.details}</td>
@@ -172,6 +177,14 @@ export const OrderListComponent = () => {
                     </div>
                 </div>
             </div>
+
+            <AddOrderModal
+                isVisible={showModal}
+                onClose={toggleShowModal}
+                text="Loading Content Summary"
+                isModify={modify}
+                selectedOrder={selectedOrder!}
+            />
 
             {/* <AddClientModal
                 isVisible={showModal}

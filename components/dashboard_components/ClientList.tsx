@@ -2,29 +2,27 @@ import { useCallback, useEffect, useState } from "react";
 // import { AddClientModal } from "./AddClientModal";
 import { BaseUrl } from "@/constants/templates";
 import router, { useRouter } from "next/router";
-import { DELETE, GET } from "@/constants/fetchConfig";
-import DeleteCountryModal from "./SettingComponents/SettingPopups/DeleteCountryModal";
+import { GET } from "@/constants/fetchConfig";
 // import DeleteCountryModal from "./SettingComponents/SettingPopups/DeleteCountryModal";
 
-export interface Job {
+export interface Client {
     _id: string;
-    post: string;
-    salary: number;
-    location: string;
-    contractType: string;
-    description: string;
-    createdAt: string;
+    firstName: string;
+    lastName: string;
+    email: string;
+    phone: string;
+    title: string;
+    address: string;
 }
 
-export const JobListComponent = () => {
-
+export const ClientListComponent = () => {
     const router = useRouter();
     const [loading, setLoading] = useState(false);
 
     const [modify, setModify] = useState(false);
     const [searchText, setSearchText] = useState("");
 
-    const [selectedEmployee, setSelectedEmployee] = useState<Job>();
+    const [selectedEmployee, setSelectedEmployee] = useState<Client>();
     const [showModal, setShowModal] = useState(false);
 
     const toggleShowModal = () => {
@@ -32,21 +30,21 @@ export const JobListComponent = () => {
         if (showModal) { setModify(false) }
     }
 
-    const handleModify = (item: Job) => {
+    const handleModify = (item: Client) => {
         setModify(true)
         setSelectedEmployee(item)
         toggleShowModal()
     }
 
-    // const [jobsData, setJobsData] = useState<Job[]>([
-    //     { _id: "0", post: "Chef de chantier", type: "Plein temps", location: "Burkina-Faso", description: "Lorem ipsum che d", date: "08 JANVIER 2023", salary: "500,000" },
-    //     { _id: "1", post: "Chauffeur", type: "Temps partiel", location: "Bénin", description: "Lorem ipsum che d", date: "08 JANVIER 2023", salary: "750,000", },
-    //     { _id: "2", post: "Manager", type: "Plein temps", location: "Togo", description: "Lorem ipsum che d", date: "08 JANVIER 2023", salary: "1,000,000", },
-    //     { _id: "3", post: "Achat Pneu ", type: "Temps partiel", location: "Côte d'Ivoire", description: "Lorem ipsum che d", date: "08 JANVIER 2023", salary: "900,000", },
+    // const [employeesData, setEmployeesData] = useState<Employee[]>([
+    //     { _id: "0", firstName: "Mikky", lastName: "Boy", email: "sample@gmail.com", phone: "+229 99 24 97 02", title: "PDG", address: "" },
+    //     { _id: "1", firstName: "Martin", lastName: "BATCHO", email: "sample@gmail.com", phone: "+229 99 24 97 02", title: "CEO", address: "" },
+    //     { _id: "2", firstName: "Kilian", lastName: "Vitou", email: "sample@gmail.com", phone: "+229 99 24 97 02", title: "Secretaire", address: "" },
+    //     { _id: "3", firstName: "Aboul", lastName: "XXX", email: "sample@gmail.com", phone: "+229 99 24 97 02", title: "Presse", address: "" },
     // ]);
 
 
-    const [jobsData, setJobsData] = useState<Job[]>([]);
+    const [employeesData, setEmployeesData] = useState<Client[]>([]);
 
     const [showDeleteModal, setShowDeleteModal] = useState(false);
 
@@ -62,11 +60,22 @@ export const JobListComponent = () => {
 
     const handleDeleteItem = async () => {
         try {
-            console.log(`Deleting job with ID: ${itemId}`);
-            const response = await DELETE(`/jobs/${itemId}`);
+            console.log(`Deleting employee with ID: ${itemId}`);
+            const response = await fetch(`${BaseUrl}/employees/${itemId}`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+
+            if (!response.ok) {
+                const errorData = await response.json()
+                alert(`Error => ${errorData.message}`)
+                throw new Error(`Failed to delete`);
+            }
 
             alert(`deleted successfully!`); // Show success alert
-            router.reload(); // Refresh the page
+            // window.location.reload(); // Refresh the page
 
         } catch (error) {
             console.error(`Error deleting:`, error);
@@ -75,15 +84,15 @@ export const JobListComponent = () => {
     };
 
     // Function to fetch commandes data
-    const fetchJobsData = useCallback(async () => {
+    const fetchEmployeesData = useCallback(async () => {
         try {
             const response = await GET(
-                `/jobs${searchText.length > 0 ? `?search=${searchText}` : ""}`,
+                `/employees${searchText.length > 0 ? `?search=${searchText}` : ""}`,
             );
 
-            const data: Job[] = response;
+            const data: Client[] = response;
             // Set the fetched data into state
-            setJobsData(data);
+            setEmployeesData(data);
         } catch (error) {
             console.error("Error fetching data:", error);
             // Handle errors
@@ -91,18 +100,17 @@ export const JobListComponent = () => {
     }, [searchText]);
 
     useEffect(() => {
-        fetchJobsData().finally(() => setLoading(false));
-    }, [fetchJobsData]);
-
+        fetchEmployeesData().finally(() => setLoading(false));
+    }, [fetchEmployeesData]);
     return (
         <div className="bg-white h-full pl-5 pr-16 pt-12 flex flex-col text-black">
             <div className="flex flex-row justify-between items-center">
-                <p className="mb-3 font-semibold text-2xl">Gestion des offres d'emplois</p>
+                <p className="mb-3 font-semibold text-2xl">Gestion des collaborateurs</p>
                 <button onClick={toggleShowModal} className="inline-flex h-[48px] items-center justify-center gap-[8px] p-[16px] relative bg-[#3D75B0] rounded-md">
                     <div onClick={() => {
-                        router.push("/dashboard/jobs?action=new")
+                        router.push("/dashboard/partners?action=new")
                     }} className="relative w-fit mt-[-4.00px] mb-[-2.00px] [font-family:'Inter-Regular',Helvetica] font-normal text-white text-[18px] tracking-[0] leading-[normal]">
-                        Créer un offre
+                        Ajouter un collaborateur
                     </div>
                     <i className="fa-solid fa-plus ml-1 text-white"></i>
                 </button>
@@ -110,9 +118,8 @@ export const JobListComponent = () => {
             <div className="pt-5">
                 <div className="px-4 py-3 pb-10 bg-[#FAFBFF] rounded-[12px]">
                     <div className="flex flex-row justify-between items-center">
-                        <div className="flex flex-row justify-between">
-                            <p className="mb-3 font-semibold text-2xl">Liste des offres d'emplois</p>
-                        </div>
+                        <p className="mb-3 font-semibold text-2xl">Liste des Collaborateurs</p>
+
                         <div className="relative w-[50%]">
                             <div className="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
                                 <i className="fa-solid fa-magnifying-glass"></i>
@@ -135,25 +142,23 @@ export const JobListComponent = () => {
                                 <table className="min-w-full">
                                     <thead>
                                         <tr className="text-gray-500">
-                                            <th className="py-2 px-4 border-b">Poste</th>
-                                            <th className="py-2 px-4 border-b">Type de contrat</th>
-                                            <th className="py-2 px-4 border-b">Proximité</th>
-                                            <th className="py-2 px-4 border-b">Description</th>
-                                            <th className="py-2 px-4 border-b">Date de creation</th>
-                                            <th className="py-2 px-4 border-b">Salaire</th>
+                                            <th className="py-2 px-4 border-b">Noms</th>
+                                            <th className="py-2 px-4 border-b">Prénoms</th>
+                                            <th className="py-2 px-4 border-b">E-mails</th>
+                                            <th className="py-2 px-4 border-b">Téléphone</th>
+                                            <th className="py-2 px-4 border-b">Titre</th>
                                             <th className="py-2 px-4 border-b">Actions</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {jobsData.map((item) => (
+                                        {employeesData.map((item) => (
                                             <tr key={item._id}>
-                                                <td className="py-2 px-4 border-b">{item.post}</td>
-                                                <td className="py-2 px-4 border-b">{item.contractType}</td>
-                                                <td className="py-2 px-4 border-b">{item.location}</td>
-                                                <td className="py-2 px-4 border-b">{item.description}</td>
-                                                <td className="py-2 px-4 border-b">{item.createdAt}</td>
+                                                <td className="py-2 px-4 border-b">{item.lastName}</td>
+                                                <td className="py-2 px-4 border-b">{item.firstName}</td>
+                                                <td className="py-2 px-4 border-b">{item.email}</td>
+                                                <td className="py-2 px-4 border-b">{item.phone}</td>
                                                 <td className="py-2 px-4 border-b flex justify-center">
-                                                    <div className={`px-4 py-2 rounded-3xl items-center justify-center text-center ${item.salary >= 1000000 ? 'bg-[#DCFCE7]' : "bg-[#FFEDD5]"} ${item.salary >= 1000000 ? 'text-[#166534]' : "text-[#9A3412]"}`}>{item.salary} fcfa</div>
+                                                    <div className={`px-4 py-2 rounded-3xl items-center justify-center text-center ${item.title.toLocaleLowerCase() === "ceo" ? 'bg-[#DCFCE7]' : "bg-[#FFEDD5]"} ${item.title.toLocaleLowerCase() === "ceo" ? 'text-[#166534]' : "text-[#9A3412]"}`}>{item.title}</div>
                                                 </td>
                                                 <td className="py-2 px-4 border-b text-center">
                                                     {/* Add your action buttons or links here */}
@@ -177,13 +182,12 @@ export const JobListComponent = () => {
                 isModify={modify}
                 selectedUser={selectedEmployee!}
             />
-            */}
 
             <DeleteCountryModal
                 isVisible={showDeleteModal}
                 onClose={() => { toggleShowDeleteModal() }}
                 onYesClick={handleDeleteItem}
-            />
+            /> */}
 
         </div>
     );

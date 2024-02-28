@@ -52,7 +52,7 @@ export const renderInputField = (
                         className="absolute inset-y-0 right-0 flex items-center pr-3"
                     >
                         <i
-                            className={`fa-solid ${!showPass ? "fa-eye-slash" : "fa-eye"
+                            className={`fa-solid ${showPass ? "fa-eye-slash" : "fa-eye"
                                 } text-gray-700`}
                         ></i>
                     </button>

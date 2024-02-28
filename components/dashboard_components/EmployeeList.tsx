@@ -1,7 +1,8 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 // import { AddClientModal } from "./AddClientModal";
 import { BaseUrl } from "@/constants/templates";
-import router from "next/router";
+import router, { useRouter } from "next/router";
+import { GET } from "@/constants/fetchConfig";
 // import DeleteCountryModal from "./SettingComponents/SettingPopups/DeleteCountryModal";
 
 export interface Employee {
@@ -15,8 +16,11 @@ export interface Employee {
 }
 
 export const EmployeeListComponent = () => {
+    const router = useRouter();
+    const [loading, setLoading] = useState(false);
 
     const [modify, setModify] = useState(false);
+    const [searchText, setSearchText] = useState("");
 
     const [selectedEmployee, setSelectedEmployee] = useState<Employee>();
     const [showModal, setShowModal] = useState(false);
@@ -32,16 +36,15 @@ export const EmployeeListComponent = () => {
         toggleShowModal()
     }
 
-    const [employeesData, setEmployeesData] = useState<Employee[]>([
-        { _id: "0", firstName: "Mikky", lastName: "Boy", email: "sample@gmail.com", phone: "+229 99 24 97 02", title: "PDG", address: "" },
-        { _id: "1", firstName: "Martin", lastName: "BATCHO", email: "sample@gmail.com", phone: "+229 99 24 97 02", title: "CEO", address: "" },
-        { _id: "2", firstName: "Kilian", lastName: "Vitou", email: "sample@gmail.com", phone: "+229 99 24 97 02", title: "Secretaire", address: "" },
-        { _id: "3", firstName: "Aboul", lastName: "XXX", email: "sample@gmail.com", phone: "+229 99 24 97 02", title: "Presse", address: "" },
-    ]);
+    // const [employeesData, setEmployeesData] = useState<Employee[]>([
+    //     { _id: "0", firstName: "Mikky", lastName: "Boy", email: "sample@gmail.com", phone: "+229 99 24 97 02", title: "PDG", address: "" },
+    //     { _id: "1", firstName: "Martin", lastName: "BATCHO", email: "sample@gmail.com", phone: "+229 99 24 97 02", title: "CEO", address: "" },
+    //     { _id: "2", firstName: "Kilian", lastName: "Vitou", email: "sample@gmail.com", phone: "+229 99 24 97 02", title: "Secretaire", address: "" },
+    //     { _id: "3", firstName: "Aboul", lastName: "XXX", email: "sample@gmail.com", phone: "+229 99 24 97 02", title: "Presse", address: "" },
+    // ]);
 
-    useEffect(() => {
-        fetchEmployeesData()
-    }, [])
+
+    const [employeesData, setEmployeesData] = useState<Employee[]>([]);
 
     const [showDeleteModal, setShowDeleteModal] = useState(false);
 
@@ -80,31 +83,25 @@ export const EmployeeListComponent = () => {
         }
     };
 
-
-    // Function to fetch employees data
-    const fetchEmployeesData = async () => {
+    // Function to fetch commandes data
+    const fetchEmployeesData = useCallback(async () => {
         try {
-            const response = await fetch(`${BaseUrl}/employees`, {
-                method: "GET",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-            });
+            const response = await GET(
+                `/employees${searchText.length > 0 ? `?search=${searchText}` : ""}`,
+            );
 
-            if (!response.ok) {
-                throw new Error("Failed to fetch data");
-            }
-
-            const data: Employee[] = await response.json();
+            const data: Employee[] = response;
             // Set the fetched data into state
             setEmployeesData(data);
-
         } catch (error) {
             console.error("Error fetching data:", error);
             // Handle errors
         }
-    };
+    }, [searchText]);
 
+    useEffect(() => {
+        fetchEmployeesData().finally(() => setLoading(false));
+    }, [fetchEmployeesData]);
     return (
         <div className="bg-white h-full pl-5 pr-16 pt-12 flex flex-col text-black">
             <div className="flex flex-row justify-between items-center">
@@ -123,11 +120,19 @@ export const EmployeeListComponent = () => {
                     <div className="flex flex-row justify-between items-center">
                         <p className="mb-3 font-semibold text-2xl">Liste des Collaborateurs</p>
 
-                        <div className="flex w-[50%] items-start gap-[8px] px-[20px] py-[16px] relative bg-white rounded-[10px] border border-solid border-[#4763e4]">
-                            <i className="fa-solid fa-magnifying-glass"></i>
-                            <p className="relative w-fit [font-family:'Inter-Regular',Helvetica] font-normal text-gray-400 text-[14px] tracking-[0] leading-[normal]">
-                                Vous cherchez quel collaborateur ...
-                            </p>
+                        <div className="relative w-[50%]">
+                            <div className="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
+                                <i className="fa-solid fa-magnifying-glass"></i>
+                            </div>
+                            <input
+                                type="search"
+                                id="default-search"
+                                className="block w-full px-4 py-3 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-white focus:ring-blue-500 focus:border-blue-500 "
+                                placeholder="Recherche ..."
+                                onChange={(e) => {
+                                    setSearchText(e.target.value);
+                                }}
+                            />
                         </div>
                     </div>
                     {/* Table */}

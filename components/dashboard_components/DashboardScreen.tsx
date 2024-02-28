@@ -1,39 +1,38 @@
-import { BaseUrl } from '@/constants/templates'
+
 import React, { useState, useEffect } from 'react'
+import { GET } from "@/constants/fetchConfig";
 
 const DashboardScreen = () => {
     const [totalColis, setTotalColis] = useState(0)
     const [totalClients, setTotalClients] = useState(0)
     const [colisDelivered, setColisDelivered] = useState(0)
 
-    // const fetchData = async () => {
-    //     try {
-    //         const response = await fetch(`${BaseUrl}/dashboard`, {
-    //             method: 'GET',
-    //             // You can add headers or body payload if needed
-    //         });
+    const fetchData = async () => {
+        try {
+            /*            const response = await fetch(`/dashboard`, {
+                            method: 'GET',
+                            // You can add headers or body payload if needed
+                        });*/
 
-    //         if (response.ok) {
-    //             const data = await response.json();
-    //             setTotalColis(data.totalColis || 0);
-    //             setTotalClients(data.totalClients || 0);
-    //             setColisDelivered(data.totalColisDelivered || 0);
-    //         } else {
-    //             // Handle error cases
-    //             throw new Error('Failed to fetch data');
-    //         }
-    //     } catch (error) {
-    //         console.error('Error fetching data:', error);
-    //         // Display an alert dialog for the error
-    //         alert('Failed to fetch data. Please try again.');
-    //     }
-    // };
+            const response = await GET(`/dashboard`);
 
-    // useEffect(() => {
-    //     console.log("AHHHH");
-    //     fetchData();
-    //     // You can add dependencies or modify the effect trigger as needed
-    // }, []); // Empty dependency array ensures this runs only once on component mount
+            const data = response;
+            setTotalColis(data.totalColis || 0);
+            setTotalClients(data.totalClients || 0);
+            setColisDelivered(data.totalColisDelivered || 0);
+
+        } catch (error) {
+            console.error('Error fetching data:', error);
+            // Display an alert dialog for the error
+            alert('Failed to fetch data. Please try again.');
+        }
+    };
+
+    useEffect(() => {
+
+        fetchData();
+        // You can add dependencies or modify the effect trigger as needed
+    }, []); // Empty dependency array ensures this runs only once on component mount
 
 
     return (

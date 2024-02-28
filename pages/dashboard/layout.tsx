@@ -12,7 +12,7 @@ interface Props {
 export const SIDEBAR_ITEMS: any = [
     {
         id: "dashboard",
-        label: "Dashboard",
+        label: "Tableau de bord",
         url: "/dashboard",
     },
     // {
@@ -32,12 +32,12 @@ export const SIDEBAR_ITEMS: any = [
     },
     {
         id: "blogs",
-        label: "blogs",
+        label: "Blogs",
         url: "/dashboard/blogs",
     },
     {
         id: "jobs",
-        label: "Jobs",
+        label: "Offres d’emplois",
         url: "/dashboard/jobs",
     },
     // {
@@ -47,7 +47,7 @@ export const SIDEBAR_ITEMS: any = [
     // },
     {
         id: "setting",
-        label: "Setting",
+        label: "Paramètres",
         url: "/dashboard/setting",
     },
     // {

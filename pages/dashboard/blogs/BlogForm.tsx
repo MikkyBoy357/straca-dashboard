@@ -1,8 +1,15 @@
 import { renderInputField } from '@/components/InputComponents/InputComponents'
+import { Blog } from '@/components/dashboard_components/BlogList';
+import { POST, PUT } from '@/constants/fetchConfig';
 import { BLOG_INPUTS, JOB_INPUTS } from '@/constants/templates'
+import { Toast } from '@/constants/toastConfig';
+import { Session } from 'next-auth';
+import { getSession } from 'next-auth/react';
+import dynamic from 'next/dynamic';
 import router from 'next/router'
 import React, { useState } from 'react'
-import ReactQuill from 'react-quill';
+// Use dynamic for lazy loading ReactQuill
+const ReactQuill = dynamic(() => import('react-quill'), { ssr: false });
 import 'react-quill/dist/quill.snow.css';
 
 const BlogForm = () => {
@@ -12,6 +19,84 @@ const BlogForm = () => {
     const [description, setDescription] = useState("");
 
     const backgroundImage = "https://s3-alpha-sig.figma.com/img/e820/b309/33faaf77f8af260428a9b35d9f503bf6?Expires=1709510400&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=cuKH-bisdmxyI9xwNl09-7tWsQIFEV9A6HkbVZ60UdB8iNYoNwZkxyGPB~GnBJnfmHUl-KXNeGS-7skVzZqqnYLxSyIeGPXmGvNqlszXkEpGQwgRbGv4QJQj~emtO4aiKNMIxU7ncab6tXkEL4NltsI44oHc0g7oAPGb~GsreJ-TExtg-G71j5dQZ~44xaU~bwzfIRRrXw8ezKy7xSTaHvW~spqq8OpPHFtB0k8OjUGCu6lIDgBDWFi1rDPZvRsKMKTHCG1CE6fA9XlWjOwHT3rU54qQnuT37YBFq9GWoP91Xprwzd2fUdVzSiuY6SbJCzVbFN2CFpFxUHsMZxLVzg__";
+
+    // Attention
+    const [isChanged, setIsChanged] = useState(false);
+    const [isModify, setIsModify] = useState(false);
+    const [selectedItem, setSelectedItem] = useState<Blog>({
+        _id: '',
+        title: '',
+        category: '',
+        image: '',
+        description: '',
+        status: '',
+        createdBy: null,
+        createdAt: '',
+    });
+
+    // Function to add blog
+    const addBlog = async (isPublish: boolean) => {
+        //
+        const session: any | Session = await getSession();
+        const currentUser = session?.user;
+        console.log(session?.user.id);
+        
+        try {
+            const newBlog = {
+                title: title,
+                category: category,
+                image: image,
+                description: description,
+                status: isPublish ? "published" : "drafted",
+                createdBy: currentUser.id,
+            };
+
+            // Perform validation to check if all variables are not empty
+            if (
+                title.trim() === "" ||
+                category?.trim() === "" ||
+                image.trim() === "" ||
+                description.trim() === "" ||
+                // contractType?.trim() === "" ||
+                description.trim() === ""
+            ) {
+                alert("Please fill in all fields.");
+                return;
+            }
+
+            var response;
+            if (!isModify) {
+
+                response = await POST(`/blogs`, newBlog);
+            } else {
+                if (!isChanged) {
+                    return alert("Values were not changed");
+                }
+
+                response = await PUT(`/blogs/${selectedItem._id}`, newBlog);
+            }
+
+            console.log(`Blog ${isModify ? "edited" : "added"} successfully!`);
+            router.back();
+            Toast.fire({
+                icon: "success",
+                title: `Blog ${isModify ? "edited" : "added"} successfully!`,
+            });
+            // router.reload();
+
+            // Clear form fields after successful addition
+            // setPrice('');
+            // setTypeColis('');
+            // setTransportType('');
+            // setUnit('');
+            // setDescription('');
+            // setQuantity('');
+        } catch (error) {
+            console.error("Error adding blog:", error);
+            alert(error);
+            // Handle errors
+        }
+    };
 
     return (
         <div className="bg-white h-full pl-5 pr-16 pt-12 flex flex-col text-black">
@@ -38,11 +123,11 @@ const BlogForm = () => {
                                 </div>
                                 {renderInputField(BLOG_INPUTS[2], image, (e) => setImage(e.target.value), undefined, undefined, "w-[30%]")}
 
-                                <button onClick={() => { }} className="my-5 px-10 py-2 text-[#3D75B0] bg-white rounded-md">
+                                <button onClick={() => addBlog(false)} className="my-5 px-10 py-2 text-[#3D75B0] bg-white rounded-md">
                                     Enregistrer
                                 </button>
 
-                                <button onClick={() => { }} className="my-5 px-10 py-2 bg-[#3D75B0] text-white rounded-md">
+                                <button onClick={() => addBlog(true)} className="my-5 px-10 py-2 bg-[#3D75B0] text-white rounded-md">
                                     Publier
                                 </button>
                             </div>
