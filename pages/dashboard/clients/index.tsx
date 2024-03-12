@@ -1,27 +1,27 @@
-import React, { ReactElement } from 'react'
+import React, { ReactElement, useState } from 'react'
 import DashboardLayout from '../layout'
-import { ClientListComponent } from '@/components/dashboard_components/ClientList'
+import { Client, ClientListComponent } from '@/components/dashboard_components/ClientList'
 import { useRouter } from 'next/router';
-// import ClientForm from './ClientForm';
+import ClientForm from './clientForm';
 
 
-const PartnersPage = () => {
+const ClientsPage = () => {
   const router = useRouter();
   const { action } = router.query; // Access action query parameter
   console.log(action);
-  
+  const [selectedClient , setSelectedClient] = useState<Client | null>(null);
   return (
     <>
-    {action === 'new' ? (
-    //   <ClientForm /> // Render JobForm if action is "new"
+    {action === 'new'|| action=== 'edit' ? (
+      <ClientForm selectedClient={selectedClient}/> 
     ) : (
-      <ClientListComponent /> // Render JobListComponent otherwise
+     <ClientListComponent setSelectedClient={setSelectedClient}/>
     )}
   </>
   )
 }
 
-PartnersPage.getLayout = function getLayout(page: ReactElement) {
+ClientsPage.getLayout = function getLayout(page: ReactElement) {
   return (
     <DashboardLayout>
       {page}
@@ -29,4 +29,4 @@ PartnersPage.getLayout = function getLayout(page: ReactElement) {
   )
 }
 
-export default PartnersPage
+export default ClientsPage;

@@ -10,7 +10,11 @@ export type TemplateInput = {
     type: "text" | "textarea" | "select" | "password";
     options?: string[];
 };
-
+export type SettingsTemplateInput = {
+    id: string,
+    label: string,
+    placeholder: string,
+}
 export const LOGIN_INPUTS: TemplateInput[] = [
     {
         id: "email",
@@ -37,7 +41,8 @@ export const BLOG_INPUTS: TemplateInput[] = [
         id: "category",
         label: "Catégorie",
         placeholder: "Catégorie",
-        type: "text",
+        type: "select",
+        options: [],
     },
     {
         id: "image",
@@ -160,6 +165,58 @@ export const USER_CONFIG_INPUTS: TemplateInput[] = [
         type: "password",
     },
 ];
+export const CLIENTS_CONFIG_INPUTS: TemplateInput[] = [
+    {
+        id: "email",
+        label: "Email",
+        placeholder: "johndoe@gmail.com",
+        type: "text",
+    },
+    {
+        id: "phone",
+        label: "Numéro de téléphone",
+        placeholder: "(+237) 696 88 77 55",
+        type: "text",
+    },
+    {
+        id: "nom",
+        label: "Nom",
+        placeholder: "John",
+        type: "text",
+    },
+    {
+        id: "prenom",
+        label: "Prénom",
+        placeholder: "Doe",
+        type: "text",
+    },
+    {
+        id: "entreprise",
+        label: "Entreprise",
+        placeholder: "Benin, Cotonou",
+        type: "text",
+    },
+    {
+        id: "password",
+        label: "Mot de passe",
+        placeholder: "*******",
+        type: "password",
+    },
+];
+export const PRODUCT_CONFIG_INPUTS: SettingsTemplateInput[] = [
+    {
+        id: "label",
+        label: "Libelle",
+        placeholder: "-------",
+      
+    },
+    {
+        id: "description",
+        label: "Description",
+        placeholder: "-------",
+      
+    },
+]
 
 export const ADD_ORDER_INPUTS: TemplateInput[] = [
     {

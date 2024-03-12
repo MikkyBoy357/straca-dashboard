@@ -69,9 +69,8 @@ export const BlogListComponent = () => {
             console.log(`Deleting employee with ID: ${itemId}`);
             const response = await DELETE(`/blogs/${itemId}`);
 
-            alert(`deleted successfully!`); // Show success alert
-            // window.location.reload(); // Refresh the page
-
+            alert(`deleted successfully!`);
+            router.reload();
         } catch (error) {
             console.error(`Error deleting:`, error);
             alert(`Failed to delete`); // Show error alert
