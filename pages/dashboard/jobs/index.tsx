@@ -1,21 +1,25 @@
-import React, { ReactElement } from 'react'
+import React, { ReactElement, useState } from 'react'
 import DashboardLayout from '../layout'
-import { JobListComponent } from '@/components/dashboard_components/JobList'
+import { Job, JobListComponent } from '@/components/dashboard_components/JobList'
 import { useRouter } from 'next/router';
 import JobForm from './JobForm';
+import { Client } from '@/components/dashboard_components/ClientList';
 
 
 const JobsPage = () => {
   const router = useRouter();
   const { action } = router.query; // Access action query parameter
-  console.log(action);
+  console.log(action);  
+  
+  const[selectedJob, setSelectedJob] = useState<Job | null>(null);
+
 
   return (
     <>
-      {action === 'new' ? (
-        <JobForm /> // Render JobForm if action is "new"
+      {action === 'new' || action === 'edit' ? (
+        <JobForm selectedJob={selectedJob} /> // Render JobForm if action is "new"
       ) : (
-        <JobListComponent /> // Render JobListComponent otherwise
+        <JobListComponent setSelectedJob={setSelectedJob} /> // Render JobListComponent otherwise
       )}
     </>
   )

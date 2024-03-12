@@ -15,11 +15,11 @@ export const SIDEBAR_ITEMS: any = [
         label: "Tableau de bord",
         url: "/dashboard",
     },
-    // {
-    //     id: "clients",
-    //     label: "Clients",
-    //     url: "/dashboard/clients",
-    // },
+    {
+        id: "clients",
+        label: "Clients",
+        url: "/dashboard/clients",
+    },
     {
         id: "commandes",
         label: "Commandes",

@@ -11,11 +11,6 @@ const axiosInstance = axios.create({ baseURL: API_URL });
 axiosInstance.interceptors.request.use(
     async function (config) {
         const session: any | Session = await getSession();
-
-
-
-
-
         if (!config?.url?.endsWith("/auth/login")) {
             if (session?.user?.jwt)
                 config.headers["Authorization"] = `Bearer ${session?.user?.jwt}`;
