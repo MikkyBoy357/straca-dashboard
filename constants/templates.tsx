@@ -7,7 +7,7 @@ export type TemplateInput = {
     id: string;
     label: string;
     placeholder: string;
-    type: "text" | "textarea" | "select" | "password";
+    type: "text" | "textarea" | "select" | "password" | "file";
     options?: string[];
 };
 export type SettingsTemplateInput = {
@@ -48,7 +48,7 @@ export const BLOG_INPUTS: TemplateInput[] = [
         id: "image",
         label: "Image",
         placeholder: "Image mis en avant",
-        type: "text",
+        type: "file",
     },
     {
         id: "description",

@@ -16,6 +16,7 @@
     "@headlessui/react": "^1.7.18",
     "axios": "^1.6.7",
     "clsx": "^2.1.0",
+    "firebase": "^10.9.0",
     "font-awesome": "^4.7.0",
     "lodash": "^4.17.21",
     "lucide-react": "^0.331.0",

@@ -20,7 +20,7 @@ const JobForm: React.FC<Props> = ({ selectedJob }) => {
   const [location, setLocation] = useState("");
   const [contractType, setContractType] = useState("");
   const [description, setDescription] = useState("");
-
+console.log(`==>${selectedJob?.location}`)
   // Attention
   const [isChanged, setIsChanged] = useState(false);
   const [isModify, setIsModify] = useState(false);
@@ -129,7 +129,7 @@ const JobForm: React.FC<Props> = ({ selectedJob }) => {
           <i className="fa-solid fa-arrow-left text-white"></i>
         </button>
         <p className="ml-2 font-semibold text-2xl">
-          Créer un offre {isChanged.toString()}
+          Créer un offre
         </p>
       </div>
       <div className="pt-5">
