@@ -27,7 +27,9 @@ const SettingsForm: React.FC = () => {
     selectedVehicleType,
   } = useSettings();
   const [isChanged, setIsChanged] = useState<boolean>(false);
-  const [selectedType , setSelectedType] = useState<ProductType | BlogType | CountryType | VehicleType | null>(null)
+  const [selectedType, setSelectedType] = useState<
+    ProductType | BlogType | CountryType | VehicleType | null
+  >(null);
 
   const wasChanged = () => {
     if (
@@ -64,17 +66,14 @@ const SettingsForm: React.FC = () => {
   useEffect(() => {
     if (isModify && type) {
       if (type === "product" && selectedProductType) {
-
         setLabel(selectedProductType.label);
         setDescription(selectedProductType.description);
         setSelectedType(selectedProductType);
       } else if (type === "blog" && selectedBlogType) {
-
         setLabel(selectedBlogType.label);
         setDescription(selectedBlogType.description);
         setSelectedType(selectedBlogType);
       } else if (type === "country" && selectedCountryType) {
-
         setLabel(selectedCountryType.label);
         setDescription(selectedCountryType.description);
         setSelectedType(selectedCountryType);
@@ -121,10 +120,7 @@ const SettingsForm: React.FC = () => {
       } else {
         try {
           if (isChanged) {
-            response = await PUT(
-              `/${type}Type/${selectedType?._id}`,
-              newType
-            );
+            response = await PUT(`/${type}Type/${selectedType?._id}`, newType);
             router.back();
             Toast.fire({
               icon: "success",

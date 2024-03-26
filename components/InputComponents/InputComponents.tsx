@@ -5,7 +5,7 @@ export const renderInputField = (
     id: any;
     label: any;
     placeholder?: string;
-    type?: "text" | "textarea" | "select" | "password";
+    type?: "text" | "textarea" | "select" | "password" | "file";
     options?: string[] | undefined;
   },
   value: string,
@@ -49,7 +49,7 @@ export const renderInputField = (
             placeholder={input.placeholder}
           />
         )}
-        {input.type == "select" && (
+        {input.type === "select" && (
           <select
             id={input.id}
             onChange={handleSelect}
@@ -57,11 +57,29 @@ export const renderInputField = (
             className="w-[520px] p-2 pb-[10px] text-gray-900 bg-white border border-gray-200 rounded-lg"
           >
             {selectList?.map((item) => (
-              <option value={item}>{item}</option>
+              <option value={item} key={item}>
+                {item}
+              </option>
             ))}
           </select>
         )}
-        {input.id == "password" && (
+        {input.type === "file" && (
+          <div className="w-full">
+            <label
+              htmlFor={input.id}
+              className="w-full p-2 text-gray-900 bg-white border border-gray-200 rounded-lg cursor-pointer"
+            >
+              Choose a file
+            </label>
+            <input
+              type="file"
+              id={input.id}
+              onChange={handleChange} // You may want to handle the change event for file input if needed
+              className="hidden"
+            />
+          </div>
+        )}
+        {input.id === "password" && (
           <button
             onClick={(e) => {
               e.preventDefault();

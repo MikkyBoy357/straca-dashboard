@@ -6,13 +6,12 @@ interface BlogGridCardProps {
 }
 
 const BlogGridCard: React.FC<BlogGridCardProps> = ({ blog }) => {
-    const backgroundImage = "https://s3-alpha-sig.figma.com/img/c7b1/f381/9ea47c5a137fb8e448d190c8675d23d8?Expires=1709510400&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=gLBZpVMc6jF50TTedQHA717Po~ttOdyFQFPBkEsl4Nu1sjhKSLaXkXqeCaJbGBzoFsGHutyzTaPv3J0ptdArgUZQWYBTYRQ5mhjcFf74rNsykpf8clQmXjELBKLlzUNyOq7~52WCs-3l42bqA4iSCSUvErAl4GMQaNIhUkosn9PaorDui-~5~i0Jxvj~xiZUCE7U7nwFaz-~3G4UW8JCsAyoWDFWfSHCwlFMIUjKgoIITtUUGqPgqZfY7REng2j7Ko-CBwZ7v857riuY6tDgPX6FR8I~BGE4DpBhIX2kieeV8x94QW0QxpJeHzhVAKnrCAgxNxsJNiGH3vB3CnOAQQ__";
 
     return (
         <div className="flex flex-col w-[258px] px-3 py-4 gap-4 rounded-sm bg-white border border-[#D9D9D9]">
             <div className="h-36 bg-black rounded-sm"
                 style={{
-                    backgroundImage: `url(${backgroundImage})`,
+                    backgroundImage: `url(${blog.image})`,
                     backgroundSize: "cover",
                     backgroundPosition: "center",
                 }}></div>

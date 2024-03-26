@@ -1,6 +1,7 @@
 import { renderInputField } from "@/components/InputComponents/InputComponents";
 import { POST } from "@/constants/fetchConfig";
 import { BaseUrl, LOGIN_INPUTS } from "@/constants/templates";
+import { Loader2 } from "lucide-react";
 import { signIn } from "next-auth/react";
 import Image from "next/image";
 import { useSearchParams } from "next/navigation";
@@ -12,6 +13,7 @@ const Login = () => {
 
   const [email, setEmail] = useState("");
   const [pass, setPass] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   const [showPass, setShowPass] = useState(false);
 
@@ -19,6 +21,7 @@ const Login = () => {
     event.preventDefault();
 
     try {
+      setIsLoading(true);
       const response = await POST(`/auth/login`, { email, password: pass });
 
       const data = response;
@@ -47,6 +50,8 @@ const Login = () => {
       console.error("Error:", error);
       // Display alert dialog to the user when login fails
       alert("Login failed. Please check your credentials and try again.");
+    } finally{
+      setIsLoading(false);
     }
   }
 
@@ -54,14 +59,6 @@ const Login = () => {
     <div className="h-screen flex flex-row bg-white">
       <div className="w-1/2 flex flex-col justify-between px-8">
         <div className="w-full mb-8">
-          {/* Image centered horizontally and at the top */}
-          {/* <img
-                        src="/logo/logo1.svg"
-                        alt="Header Logo"
-                        className="mx-auto mt-5 block"
-                        width={`70%`}
-                        height={24}
-                    /> */}
           <div className="w-[70%] h-24 mx-auto mt-5 block">
             <svg
               width="full"
@@ -162,7 +159,7 @@ const Login = () => {
                 type="submit"
                 className="w-full py-3 px-4 bg-[#3D75B0] text-white rounded-md hover:bg-blue-700"
               >
-                Login
+                {isLoading ? <Loader2 className="animate-spin" size={20}/> : `Login`}
               </button>
             </div>
           </form>
@@ -173,7 +170,7 @@ const Login = () => {
         className="w-1/2 bg-cover bg-center"
         style={{
           backgroundImage:
-            "url(https://s3-alpha-sig.figma.com/img/3dea/fa45/29636683ee34027e975f74ede6fc95dd?Expires=1710115200&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=QRkco~WIy2JicYg-KNZmmBLLLOYQ2shytioSFRadnnL2B-n7Hye~so6g~z8B4qRJXXvzzhaPeVgHP4fqppCM8zOkk2ovT8gvwOy-Dkz1YateQYJeaXFmLHpn-5rjywSwi6ZnbQDhtMGOzyB6N-QA7bOxQ~b5o~8jcLUYarD~LlHWwLr3B-9C9UGa~caDsgTLKj5AOoDx3bQer5yWPHrJ4uHQV6U~SskehlecXhYKIdBFW9Skk8uaqUJZvlB-9ZN1qCNjJyA6LHN5X1usbly7Cl6pZYlYLSvpINwNnHTmjbrBNV58REtxgesG5yCV2w4XlHLa~XtONubhidsaB~mnCQ__)",
+            "url(https://s3-alpha-sig.figma.com/img/3dea/fa45/29636683ee34027e975f74ede6fc95dd?Expires=1711324800&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=LFnO~bn5c-Cl~hqRQvqEDotrywGVACbPf8lhW3W7E0mC2FMA6T6Z8CSHF2Ixnjd1HdAmLFYFKK4emt058FOWgwTuieTPlSMzeLz3nLTH1ykCCMUSv~z0xmZgUBYTA4AFcEXccuOmcnT8TCM-mxL3wAdkANkb78Eu1d2MMnIKOJzuC28iAWoTjZBXQ~ZZcyyzu8iM3HYjH5OmmbZwCrDMKG15229BaE7jFeaVOmsHxU8CQik78wHuZp1QLmb7-Ac8fQR5ybpq3uz5nntQi1As2eAel5Fpc8t-Clz35lfVwXvgdZuBE~TgSTldE0tyQp5iY0~AvdE9NxsrPSho8~AFQQ__)",
         }}
       >
         {/* Add optional content for the background section */}

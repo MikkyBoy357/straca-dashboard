@@ -18,7 +18,7 @@ interface ProductProps {
 
 export const ProductCard: React.FC<ProductProps> = ({ setSelectedItem }) => {
   const router = useRouter();
-
+const {action, type} = router.query;
   const [productTypesData, setProductTypesData] = useState<ProductType[]>([]);
   const [searchText, setSearchText] = useState("");
   const [isLoading, setIsLoading] = useState(false);

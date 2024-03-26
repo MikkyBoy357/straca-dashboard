@@ -12,13 +12,13 @@ export interface BlogType {
   label: string;
   description: string;
 }
-export const BlogCard: React.FC = ({
-}) => {
+export const BlogCard: React.FC = ({}) => {
   const router = useRouter();
+  const { action } = router.query;
   const [blogTypesData, setBlogTypesData] = useState<BlogType[]>([]);
   const [searchText, setSearchText] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const {setSelectedBlogType } = useSettings();
+  const { setSelectedBlogType } = useSettings();
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [itemId, setItemId] = useState("");
   const toggleShowDeleteModal = () => {
@@ -49,12 +49,17 @@ export const BlogCard: React.FC = ({
     router.push("/dashboard/setting?action=edit&type=blog");
   };
   const handleDelete = async () => {
-    await DELETE(`/blogType/${itemId}`);
-    Toast.fire({
-      icon: "success",
-      title: "Blog Category Deleted Successfully",
-    });
-    router.reload();
+    try {
+      await DELETE(`/blogType/${itemId}`);
+      Toast.fire({
+        icon: "success",
+        title: "Blog Category Deleted Successfully",
+      });
+      router.reload();
+    } catch (error) {
+      console.log(error);
+    }
+  
   };
 
   return (
@@ -110,7 +115,6 @@ export const BlogCard: React.FC = ({
                         <button
                           onClick={() => {
                             handleModify(item);
-                            
                           }}
                           className="h-8 px-4 rounded-lg border border-indigo-500 justify-center items-center inline-flex"
                         >
@@ -120,9 +124,9 @@ export const BlogCard: React.FC = ({
                         </button>
                         <button
                           onClick={() => {
-                              setItemId(item._id);
-                              toggleShowDeleteModal();
-                            
+                          
+                            setItemId(item._id);
+                            toggleShowDeleteModal();
                           }}
                           className="ml-4 h-8 px-4 bg-red-600 rounded-lg justify-center items-center inline-flex"
                         >
@@ -143,7 +147,7 @@ export const BlogCard: React.FC = ({
       </div>
       <DeleteCountryModal
         isVisible={showDeleteModal}
-        onClose={toggleShowDeleteModal}
+        onClose={() => router.back()}
         onYesClick={handleDelete}
       ></DeleteCountryModal>
     </div>
