@@ -16,7 +16,7 @@ export interface CountryType {
 
 
 export const CountryCard: React.FC = ({
-  
+
 }) => {
   const router = useRouter();
   const [countryTypesData, setCountryTypesData] = useState<CountryType[]>([]);
@@ -39,8 +39,13 @@ export const CountryCard: React.FC = ({
       const data: CountryType[] = response;
       setCountryTypesData(data);
       setIsLoading(false);
-    } catch (error) {
-      alert(error);
+    } catch (error: any) {
+      const errorMessage = error.response.data.error.message;
+      console.log(errorMessage);
+      return Toast.fire({
+        icon: "error",
+        title: `Error: ${errorMessage}`,
+      });
     }
   }, [searchText]);
 
@@ -89,7 +94,7 @@ export const CountryCard: React.FC = ({
           />
         </div>
 
-        {isLoading? (
+        {isLoading ? (
           <CustomLoader />
         ) : (
           <div className="inline-flex flex-col items-start gap-[16px]">

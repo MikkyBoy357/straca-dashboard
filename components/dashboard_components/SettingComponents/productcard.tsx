@@ -39,8 +39,13 @@ const {action, type} = router.query;
       const data: ProductType[] = response;
       setProductTypesData(data);
       setIsLoading(false);
-    } catch (error) {
-      alert(error);
+    } catch (error:any) {
+      const errorMessage=error.response.data.error.message;
+      console.log(errorMessage);
+      return Toast.fire({
+        icon: "error",
+        title: `Error: ${errorMessage}`,
+      });
     }
   }, [searchText]);
 
