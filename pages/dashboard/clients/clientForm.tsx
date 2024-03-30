@@ -1,5 +1,6 @@
 import { renderInputField } from "@/components/InputComponents/InputComponents";
 import { Client } from "@/components/dashboard_components/ClientList";
+import LaodingModal from "@/components/loadingmodal";
 import { POST, PUT } from "@/constants/fetchConfig";
 import {
   CLIENTS_CONFIG_INPUTS,
@@ -16,6 +17,8 @@ interface Props {
   selectedClient: Client | null;
 }
 const ClientForm: React.FC<Props> = ({ selectedClient }) => {
+  console.log(selectedClient);
+  const [showLoadingModal, setShowLoadingModal] = useState(false);
   const router = useRouter();
   const { action } = router.query;
   const [isModify, setIsModify] = useState(false);
@@ -55,12 +58,17 @@ const ClientForm: React.FC<Props> = ({ selectedClient }) => {
       }
     }
   }, [isModify]);
+
+
   useEffect(() => {
     if (isModify) {
       wasChanged();
     }
   }, [email, password, firstName, lastName, company, phone]);
+
+
   const addClient = async () => {
+    setShowLoadingModal(true)
     try {
       const newClient = {
         firstName: firstName,
@@ -69,28 +77,36 @@ const ClientForm: React.FC<Props> = ({ selectedClient }) => {
         password: password,
         phone: phone,
         email: email,
-        type: 'client',
+        type: "client",
       };
 
       // Validate Fields
       if (
-        !isChanged
+        firstName.trim() === "" ||
+        lastName?.trim() === "" ||
+        company?.trim() === "" ||
+        (!isModify && password?.trim()) === "" ||
+        phone.trim() === "" ||
+        email.trim() === ""
       ) {
-        if ((action === 'new') && password?.trim() === "") {
-
-        }
-        return Toast.fire({
+        Toast.fire({
           icon: "error",
-          title: `Les champs n'ont pas été modifiés`,
+          title: `Tous les champs sont requis`,
         });
-      } else {
-
+        return;
       }
 
       var response;
       if (!isModify) {
         response = await POST(`/auth/signup`, newClient);
+        
       } else {
+        if(!isChanged) {
+          Toast.fire({
+            icon: "error",
+            title: `Les champs n'ont pas été modifiés`,
+          });
+        }
         response = await PUT(`/clients/${selectedClient?._id}`, newClient);
       }
 
@@ -101,12 +117,14 @@ const ClientForm: React.FC<Props> = ({ selectedClient }) => {
         title: `Client ${isModify ? "edited" : "added"} successfully!`,
       });
     } catch (error: any) {
-      const errorMessage=error.response.data.error.message;
+      const errorMessage = error.response.data.error.message;
       console.log(errorMessage);
       return Toast.fire({
         icon: "error",
         title: `Error: ${errorMessage}`,
       });
+    } finally{
+      setShowLoadingModal(false);
     }
   };
   return (
@@ -120,7 +138,7 @@ const ClientForm: React.FC<Props> = ({ selectedClient }) => {
         >
           <i className="fa-solid fa-arrow-left text-white"></i>
         </button>
-        <p className="ml-2 font-semibold text-2xl">Créer un client</p>
+        <p className="ml-2 font-semibold text-2xl">{isModify ? `Modifier` : "Creer"} un client</p>
       </div>
       <div className="pt-5">
         <div className="px-4 py-3 pb-10 bg-[#FAFBFF] rounded-[12px]">
@@ -152,16 +170,17 @@ const ClientForm: React.FC<Props> = ({ selectedClient }) => {
               {renderInputField(CLIENTS_CONFIG_INPUTS[4], company, (e) =>
                 setCompany(e.target.value)
               )}
-              {action === 'new' && renderInputField(
-                CLIENTS_CONFIG_INPUTS[5],
-                password,
-                (e) => setPassword(e.target.value),
-                undefined,
-                undefined,
-                undefined,
-                showPass,
-                setShowPass
-              )}
+              {action === "new" &&
+                renderInputField(
+                  CLIENTS_CONFIG_INPUTS[5],
+                  password,
+                  (e) => setPassword(e.target.value),
+                  undefined,
+                  undefined,
+                  undefined,
+                  showPass,
+                  setShowPass
+                )}
             </div>
             <center>
               <button
@@ -174,6 +193,7 @@ const ClientForm: React.FC<Props> = ({ selectedClient }) => {
           </div>
         </div>
       </div>
+      <LaodingModal isOpen={showLoadingModal}/>
       {/* Form */}
     </div>
   );

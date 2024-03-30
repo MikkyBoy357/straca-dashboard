@@ -2,8 +2,9 @@ import React, { useCallback, useEffect, useState } from "react";
 // import { AddClientModal } from "./AddClientModal";
 import { BaseUrl } from "@/constants/templates";
 import router, { useRouter } from "next/router";
-import { GET } from "@/constants/fetchConfig";
+import { DELETE, GET } from "@/constants/fetchConfig";
 import DeleteCountryModal from "./SettingComponents/SettingPopups/DeleteCountryModal";
+import { Toast } from "@/constants/toastConfig";
 // import DeleteCountryModal from "./SettingComponents/SettingPopups/DeleteCountryModal";
 
 export interface Client {
@@ -47,25 +48,20 @@ export const ClientListComponent: React.FC<props> = ({setSelectedClient}) => {
     const handleDeleteItem = async () => {
         try {
             console.log(`Deleting Client with ID: ${itemId}`);
-            const response = await fetch(`${BaseUrl}/clients/${itemId}`, {
-                method: 'DELETE',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-            });
-
-            if (!response.ok) {
-                const errorData = await response.json()
-                alert(`Error => ${errorData.message}`)
-                throw new Error(`Failed to delete`);
-            }
-
-            alert(`deleted successfully!`); // Show success alert
-            // window.location.reload(); // Refresh the page
+            const response = await DELETE(`/clients/${itemId}`);
+            
+              router.reload();
+              Toast.fire({
+                icon: "success",
+                title: `Supprimé avec succès`,
+              });
 
         } catch (error) {
             console.error(`Error deleting:`, error);
-            alert(`Failed to delete`); // Show error alert
+            Toast.fire({
+                icon: "error",
+                title: `Échec de la suppression`,
+              });
         }
     };
 
