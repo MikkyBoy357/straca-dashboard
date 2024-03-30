@@ -70,7 +70,7 @@ const BlogForm: React.FC<props> = ({ selectedBlog }) => {
       setIsModify(false); // Reset to false if selectedBlog is null or action is not "edit"
     }
   }, [action,]);
-  
+
   useEffect(() => {
     if (isModify === true) {
       setTitle(selectedBlog?.title ?? "");
@@ -112,7 +112,7 @@ const BlogForm: React.FC<props> = ({ selectedBlog }) => {
       if (imageFile !== null) {
         formData.append("file", imageFile!);
       }
-        // Perform validation to check if all variables are not empty
+      // Perform validation to check if all variables are not empty
       if (
         title.trim() === "" ||
         category?.trim() === "" ||
@@ -129,9 +129,12 @@ const BlogForm: React.FC<props> = ({ selectedBlog }) => {
       } else {
 
         if (isChanged === false) {
-          return alert("Values were not changed");
+          return Toast.fire({
+            icon: "error",
+            title: `Les champs n'ont pas été modifiés`,
+          });
         }
-        
+
         response = await PUT(`/blogs/${selectedBlog?._id}`, formData);
         console.log(response);
       }
@@ -211,20 +214,20 @@ const BlogForm: React.FC<props> = ({ selectedBlog }) => {
                       alt="Selected Blog Image"
                       className="w-20 h-20 object-cover"
                     />
-                     <div className="w-80 bg-white p-6 rounded-md shadow-md">
-                    <label className="block text-gray-700 text-sm font-bold mb-2">
-                      Choose a file:
-                    </label>
-                    <input
-                      type="file"
-                      id="fileInput"
-                      name="fileInput"
-                      onChange={(e) => {
-                        handleImageChange(e);
-                      }}
-                      className="border-gray-300 focus:ring focus:ring-blue-200 focus:outline-none p-2 w-full"
-                    />
-                  </div>
+                    <div className="w-80 bg-white p-6 rounded-md shadow-md">
+                      <label className="block text-gray-700 text-sm font-bold mb-2">
+                        Choose a file:
+                      </label>
+                      <input
+                        type="file"
+                        id="fileInput"
+                        name="fileInput"
+                        onChange={(e) => {
+                          handleImageChange(e);
+                        }}
+                        className="border-gray-300 focus:ring focus:ring-blue-200 focus:outline-none p-2 w-full"
+                      />
+                    </div>
                   </div>
                 ) : (
                   <div className="max-w-md mx-auto bg-white p-6 rounded-md shadow-md">
@@ -259,9 +262,8 @@ const BlogForm: React.FC<props> = ({ selectedBlog }) => {
                 </div> */}
                 <button
                   onClick={() => addBlog(false)}
-                  className={`my-5 px-10 py-2 text-[#3D75B0] bg-white rounded-md ${
-                    isSaving ? "opacity-50 cursor-not-allowed" : ""
-                  }`}
+                  className={`my-5 px-10 py-2 text-[#3D75B0] bg-white rounded-md ${isSaving ? "opacity-50 cursor-not-allowed" : ""
+                    }`}
                 >
                   {isSaving === true ? (
                     <Loader2 className="animate-spin" size={20} />
@@ -272,9 +274,8 @@ const BlogForm: React.FC<props> = ({ selectedBlog }) => {
 
                 <button
                   onClick={() => addBlog(true)}
-                  className={`my-5 px-10 py-2 text-white bg-[#3D75B0] rounded-md ${
-                    isPublishing ? "opacity-50 cursor-not-allowed" : ""
-                  }`}
+                  className={`my-5 px-10 py-2 text-white bg-[#3D75B0] rounded-md ${isPublishing ? "opacity-50 cursor-not-allowed" : ""
+                    }`}
                 >
                   {isPublishing === true ? (
                     <Loader2 className="animate-spin" size={20} />

@@ -23,7 +23,7 @@ const ClientForm: React.FC<Props> = ({ selectedClient }) => {
   const [phone, setPhone] = useState("");
   const [lastName, setLastName] = useState("");
   const [firstName, setFirstName] = useState("");
-  const [address, setAddress] = useState("");
+  const [company, setCompany] = useState("");
   const [password, setPassword] = useState("");
   const [showPass, setShowPass] = useState(false);
   const [isChanged, setIsChanged] = useState(false);
@@ -33,11 +33,14 @@ const ClientForm: React.FC<Props> = ({ selectedClient }) => {
       phone !== selectedClient?.phone ||
       firstName !== selectedClient?.firstName ||
       lastName !== selectedClient?.lastName ||
-      address !== selectedClient?.address
+      company !== selectedClient?.company
     ) {
-      setIsChanged(true);
+      if (action === "new" && password === "") {
+        return setIsChanged(false);
+      }
+      return setIsChanged(true);
     } else {
-      setIsChanged(false);
+      return setIsChanged(false);
     }
   };
   useEffect(() => {
@@ -45,7 +48,7 @@ const ClientForm: React.FC<Props> = ({ selectedClient }) => {
       setIsModify(true);
       if (isModify) {
         setEmail(selectedClient?.email ?? "");
-        setAddress(selectedClient?.address ?? "");
+        setCompany(selectedClient?.company ?? "");
         setFirstName(selectedClient?.firstName ?? "");
         setLastName(selectedClient?.lastName ?? "");
         setPhone(selectedClient?.phone ?? "");
@@ -56,37 +59,38 @@ const ClientForm: React.FC<Props> = ({ selectedClient }) => {
     if (isModify) {
       wasChanged();
     }
-  }, [email, password, firstName, lastName, address, phone]);
-  const addClient = async() => {
+  }, [email, password, firstName, lastName, company, phone]);
+  const addClient = async () => {
     try {
       const newClient = {
-        firstName: firstName, 
+        firstName: firstName,
         lastName: lastName,
-        address: address,
+        company: company,
         password: password,
         phone: phone,
         email: email,
         type: 'client',
       };
+
+      // Validate Fields
       if (
-        firstName?.trim() === "" ||
-        lastName?.trim() === "" ||
-        address?.trim() === "" ||
-        password?.trim() === "" ||
-        phone?.trim() === "" ||
-        email?.trim() === ""
+        !isChanged
       ) {
-        alert(`All fields are required`);
-        return;
+        if ((action === 'new') && password?.trim() === "") {
+
+        }
+        return Toast.fire({
+          icon: "error",
+          title: `Les champs n'ont pas été modifiés`,
+        });
+      } else {
+
       }
+
       var response;
       if (!isModify) {
         response = await POST(`/auth/signup`, newClient);
       } else {
-        if (!isChanged) {
-          return alert("Values were not changed");
-        }
-
         response = await PUT(`/clients/${selectedClient?._id}`, newClient);
       }
 
@@ -96,7 +100,14 @@ const ClientForm: React.FC<Props> = ({ selectedClient }) => {
         icon: "success",
         title: `Client ${isModify ? "edited" : "added"} successfully!`,
       });
-    } catch (error) {}
+    } catch (error: any) {
+      const errorMessage=error.response.data.error.message;
+      console.log(errorMessage);
+      return Toast.fire({
+        icon: "error",
+        title: `Error: ${errorMessage}`,
+      });
+    }
   };
   return (
     <div className="bg-white h-full pl-5 pr-16 pt-12 flex flex-col text-black">
@@ -109,7 +120,7 @@ const ClientForm: React.FC<Props> = ({ selectedClient }) => {
         >
           <i className="fa-solid fa-arrow-left text-white"></i>
         </button>
-        <p className="ml-2 font-semibold text-2xl">Créer un collaborateur</p>
+        <p className="ml-2 font-semibold text-2xl">Créer un client</p>
       </div>
       <div className="pt-5">
         <div className="px-4 py-3 pb-10 bg-[#FAFBFF] rounded-[12px]">
@@ -138,10 +149,10 @@ const ClientForm: React.FC<Props> = ({ selectedClient }) => {
               )}
             </div>
             <div className="flex w-full justify-between items-start gap-[12px] relative flex-[0_0_auto]">
-              {renderInputField(CLIENTS_CONFIG_INPUTS[4], address, (e) =>
-                setAddress(e.target.value)
+              {renderInputField(CLIENTS_CONFIG_INPUTS[4], company, (e) =>
+                setCompany(e.target.value)
               )}
-              {renderInputField(
+              {action === 'new' && renderInputField(
                 CLIENTS_CONFIG_INPUTS[5],
                 password,
                 (e) => setPassword(e.target.value),

@@ -12,7 +12,6 @@ export const SettingScreen = () => {
         <p className="mb-3 font-semibold text-2xl">Parametres</p>
         <div className="flex flex-row">
           <ProductCard />
-
           <BlogCard />
         </div>
         <div className="mt-4 flex flex-row">

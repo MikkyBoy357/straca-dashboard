@@ -12,7 +12,7 @@ export interface BlogType {
   label: string;
   description: string;
 }
-export const BlogCard: React.FC = ({}) => {
+export const BlogCard: React.FC = ({ }) => {
   const router = useRouter();
   const { action } = router.query;
   const [blogTypesData, setBlogTypesData] = useState<BlogType[]>([]);
@@ -59,7 +59,7 @@ export const BlogCard: React.FC = ({}) => {
     } catch (error) {
       console.log(error);
     }
-  
+
   };
 
   return (
@@ -77,14 +77,11 @@ export const BlogCard: React.FC = ({}) => {
             <i className="fa-solid fa-plus ml-1"></i>
           </button>
         </div>
-        <div className="relative">
-          <div className="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
-            <i className="fa-solid fa-magnifying-glass"></i>
-          </div>
+        <div className="flex">
           <input
             type="search"
             id="default-search"
-            className="block w-full px-4 py-3 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-white focus:ring-blue-500 focus:border-blue-500 "
+            className="block w-full px-4 py-3 text-sm text-gray-900 border border-gray-300 rounded-lg bg-white focus:ring-blue-500 focus:border-blue-500 "
             placeholder="Recherche ..."
             onChange={(e) => {
               setSearchText(e.target.value);
@@ -124,7 +121,7 @@ export const BlogCard: React.FC = ({}) => {
                         </button>
                         <button
                           onClick={() => {
-                          
+
                             setItemId(item._id);
                             toggleShowDeleteModal();
                           }}
@@ -147,7 +144,7 @@ export const BlogCard: React.FC = ({}) => {
       </div>
       <DeleteCountryModal
         isVisible={showDeleteModal}
-        onClose={() => router.back()}
+        onClose={toggleShowDeleteModal}
         onYesClick={handleDelete}
       ></DeleteCountryModal>
     </div>

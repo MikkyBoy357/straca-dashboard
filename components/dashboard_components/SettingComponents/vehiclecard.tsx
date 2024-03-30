@@ -12,7 +12,7 @@ export interface VehicleType {
   description: string;
 }
 
-export const VehicleCard: React.FC = ({}) => {
+export const VehicleCard: React.FC = ({ }) => {
   const router = useRouter();
   const [vehicleTypesData, setVehicleTypesData] = useState<VehicleType[]>([]);
   const [searchText, setSearchText] = useState("");
@@ -71,14 +71,11 @@ export const VehicleCard: React.FC = ({}) => {
             <i className="fa-solid fa-plus ml-1"></i>
           </button>
         </div>
-        <div className="relative">
-          <div className="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
-            <i className="fa-solid fa-magnifying-glass"></i>
-          </div>
+        <div className="flex">
           <input
             type="search"
             id="default-search"
-            className="block w-full px-4 py-3 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-white focus:ring-blue-500 focus:border-blue-500 "
+            className="block w-full px-4 py-3 text-sm text-gray-900 border border-gray-300 rounded-lg bg-white focus:ring-blue-500 focus:border-blue-500 "
             placeholder="Recherche ..."
             onChange={(e) => {
               setSearchText(e.target.value);
@@ -105,7 +102,7 @@ export const VehicleCard: React.FC = ({}) => {
                       <td className="py-2 px-4 border-b">{item.label}</td>
                       <td className="py-2 px-4 border-b">{item.description}</td>
                       <td className="py-2 px-4 border-b">
-            
+
                         <button
                           onClick={() => {
                             handleModify(item)
