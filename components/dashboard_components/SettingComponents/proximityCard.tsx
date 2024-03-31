@@ -7,33 +7,33 @@ import { useRouter } from "next/router";
 import { Toast } from "@/constants/toastConfig";
 import DeleteCountryModal from "./SettingPopups/DeleteCountryModal";
 
-export interface BlogType {
+export interface Proximity {
   _id: string;
   label: string;
   description: string;
 }
-export const BlogCard: React.FC = ({ }) => {
+export const ProximityCard: React.FC = ({ }) => {
   const router = useRouter();
   const { action } = router.query;
-  const [blogTypesData, setBlogTypesData] = useState<BlogType[]>([]);
+  const [proximityData, setProximityData] = useState<Proximity[]>([]);
   const [searchText, setSearchText] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const { setSelectedBlogType } = useSettings();
+  const { setSelectedProximity } = useSettings();
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [itemId, setItemId] = useState("");
   const toggleShowDeleteModal = () => {
     setShowDeleteModal(!showDeleteModal);
   };
-  const fetchBlogTypes = useCallback(async () => {
+  const fetchProximities = useCallback(async () => {
     try {
       const response = await GET(
-        `/blogType${searchText.length > 0 ? `?search=${searchText}` : ""}`
+        `/proximity${searchText.length > 0 ? `?search=${searchText}` : ""}`
       );
       console.log(
-        `/blogType${searchText.length > 0 ? `?search=${searchText}` : ""}`
+        `/proximity${searchText.length > 0 ? `?search=${searchText}` : ""}`
       );
-      const data: BlogType[] = response;
-      setBlogTypesData(data);
+      const data: Proximity[] = response;
+      setProximityData(data);
       setIsLoading(false);
     } catch (error: any) {
       const errorMessage = error.response.data.error.message;
@@ -46,19 +46,19 @@ export const BlogCard: React.FC = ({ }) => {
   }, [searchText]);
 
   useEffect(() => {
-    fetchBlogTypes().finally(() => setIsLoading(false));
-  }, [fetchBlogTypes]);
+    fetchProximities().finally(() => setIsLoading(false));
+  }, [fetchProximities]);
 
-  const handleModify = (item: BlogType) => {
-    setSelectedBlogType(item);
-    router.push("/dashboard/setting?action=edit&type=blogType");
+  const handleModify = (item: Proximity) => {
+    setSelectedProximity(item);
+    router.push("/dashboard/setting?action=edit&type=proximity");
   };
   const handleDelete = async () => {
     try {
-      await DELETE(`/blogType/${itemId}`);
+      await DELETE(`/proximity/${itemId}`);
       Toast.fire({
         icon: "success",
-        title: "Blog Category Deleted Successfully",
+        title: "Proximité Category Deleted Successfully",
       });
       router.reload();
     } catch (error) {
@@ -71,10 +71,10 @@ export const BlogCard: React.FC = ({ }) => {
     <div className="w-1/2 mr-10 px-4 py-3 pb-10 bg-white rounded-[12px]">
       <div className="rounded-[12px] border-blue-600">
         <div className="mb-3 flex flex-row justify-between top-[31px] [font-family:'Inter-Regular',Helvetica] font-normal text-gray-800 text-[18px] tracking-[0] leading-[normal]">
-          Catégorie d’article de Blog
+          Catégorie d’article de Proximité
           <button
             onClick={() => {
-              router.push("/dashboard/setting?action=new&type=blogType");
+              router.push("/dashboard/setting?action=new&type=proximity");
             }}
             className="px-4 py-3 [font-family:'Inter-Regular',Helvetica] font-normal text-[#ffffff] text-sm tracking-[0] leading-[normal] bg-[#4763E4] items-center rounded-xl"
           >
@@ -108,7 +108,7 @@ export const BlogCard: React.FC = ({ }) => {
                   </tr>
                 </thead>
                 <tbody>
-                  {blogTypesData.map((item) => (
+                  {proximityData.map((item) => (
                     <tr key={item._id} className="text-sm">
                       <td className="py-2 px-4 border-b">{item.label}</td>
                       <td className="py-2 px-4 border-b">{item.description}</td>
@@ -156,4 +156,4 @@ export const BlogCard: React.FC = ({ }) => {
   );
 };
 
-export default BlogCard;
+export default ProximityCard;

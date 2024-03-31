@@ -58,7 +58,7 @@ export const ContractTypeCard: React.FC = ({
 
     const handleModify = (item: ContractType) => {
         setSelectedContractType(item);
-        router.push("/dashboard/setting?action=edit&type=contract");
+        router.push("/dashboard/setting?action=edit&type=contractType");
     };
     const handleDelete = async () => {
         await DELETE(`/contractType/${itemId}`);
@@ -80,7 +80,7 @@ export const ContractTypeCard: React.FC = ({
                     Liste des types de contract
                     <button
                         onClick={() => {
-                            router.push("/dashboard/setting?action=new&type=contract")
+                            router.push("/dashboard/setting?action=new&type=contractType")
                         }}
                         className="px-4 py-3 [font-family:'Inter-Regular',Helvetica] font-normal text-[#ffffff] text-sm tracking-[0] leading-[normal] bg-[#4763E4] items-center rounded-xl"
                     >

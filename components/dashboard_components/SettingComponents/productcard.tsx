@@ -55,7 +55,7 @@ const {action, type} = router.query;
 
   const handleModify = (item: ProductType) => {
     setSelectedProductType(item);
-    router.push("/dashboard/setting?action=edit&type=product");
+    router.push("/dashboard/setting?action=edit&type=productType");
   };
   const handleDelete = async () => {
     await DELETE(`/productType/${itemId}`);
@@ -73,7 +73,7 @@ const {action, type} = router.query;
           Liste des services ou produits{" "}
           <button
             onClick={() => {
-              router.push("/dashboard/setting?action=new&type=product");
+              router.push("/dashboard/setting?action=new&type=productType");
             }}
             className="px-4 py-3 [font-family:'Inter-Regular',Helvetica] font-normal text-[#ffffff] text-sm tracking-[0] leading-[normal] bg-[#4763E4] items-center rounded-xl"
           >

@@ -8,7 +8,6 @@ import SettingsForm from "./settingsForm";
 const SettingsPage = () => {
   const router = useRouter();
   const { action, type } = router.query; // Access action query parameter
-  console.log(`type==>${type}`);
 
   return (
     <>

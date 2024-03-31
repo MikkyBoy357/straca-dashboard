@@ -2,6 +2,7 @@ import { BlogType } from "@/components/dashboard_components/SettingComponents/bl
 import { ContractType } from "@/components/dashboard_components/SettingComponents/contractTypeCard";
 import { CountryType } from "@/components/dashboard_components/SettingComponents/countrycard";
 import { ProductType } from "@/components/dashboard_components/SettingComponents/productcard";
+import { Proximity } from "@/components/dashboard_components/SettingComponents/proximityCard";
 import { VehicleType } from "@/components/dashboard_components/SettingComponents/vehiclecard";
 import React, { createContext, useState, useContext, ReactNode } from "react";
 
@@ -16,6 +17,8 @@ interface SettingsContextProps {
   setSelectedCountryType: (item: CountryType | null) => void;
   selectedContractType: CountryType | null;
   setSelectedContractType: (item: CountryType | null) => void;
+  selectedProximity: CountryType | null;
+  setSelectedProximity: (item: CountryType | null) => void;
 }
 
 const SettingsContext = createContext<SettingsContextProps | undefined>(
@@ -36,6 +39,8 @@ export const SettingsProvider: React.FC<{ children: ReactNode }> = ({
     useState<CountryType | null>(null);
   const [selectedContractType, setSelectedContractType] =
     useState<ContractType | null>(null);
+  const [selectedProximity, setSelectedProximity] =
+    useState<Proximity | null>(null);
   return (
     <SettingsContext.Provider
       value={{
@@ -49,6 +54,8 @@ export const SettingsProvider: React.FC<{ children: ReactNode }> = ({
         setSelectedCountryType,
         selectedContractType,
         setSelectedContractType,
+        selectedProximity,
+        setSelectedProximity,
       }}
     >
       {children}

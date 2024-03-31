@@ -50,7 +50,7 @@ export const VehicleCard: React.FC = ({ }) => {
 
   const handleModify = (item: VehicleType) => {
     setSelectedVehicleType(item);
-    router.push("/dashboard/setting?action=edit&type=vehicle");
+    router.push("/dashboard/setting?action=edit&type=vehicleType");
   };
   const handleDelete = async () => {
     await DELETE(`/vehicleType/${itemId}`);
@@ -68,7 +68,7 @@ export const VehicleCard: React.FC = ({ }) => {
           Type de véhicule
           <button
             onClick={() => {
-              router.push("/dashboard/setting?action=new&type=vehicle");
+              router.push("/dashboard/setting?action=new&type=vehicleType");
             }}
             className="px-4 py-3 [font-family:'Inter-Regular',Helvetica] font-normal text-[#ffffff] text-sm tracking-[0] leading-[normal] bg-[#4763E4] items-center rounded-xl"
           >

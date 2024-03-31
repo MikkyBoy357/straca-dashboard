@@ -55,7 +55,7 @@ export const CountryCard: React.FC = ({
 
   const handleModify = (item: CountryType) => {
     setSelectedCountryType(item);
-    router.push("/dashboard/setting?action=edit&type=country");
+    router.push("/dashboard/setting?action=edit&type=countryType");
   };
   const handleDelete = async () => {
     await DELETE(`/countryType/${itemId}`);
@@ -77,7 +77,7 @@ export const CountryCard: React.FC = ({
           Liste des pays
           <button
             onClick={() => {
-              router.push("/dashboard/setting?action=new&type=country")
+              router.push("/dashboard/setting?action=new&type=countryType")
             }}
             className="px-4 py-3 [font-family:'Inter-Regular',Helvetica] font-normal text-[#ffffff] text-sm tracking-[0] leading-[normal] bg-[#4763E4] items-center rounded-xl"
           >

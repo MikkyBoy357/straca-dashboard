@@ -2,8 +2,10 @@
 import { renderInputField } from "@/components/InputComponents/InputComponents";
 import { renderSettingsTextField } from "@/components/InputComponents/settinginputcomponent";
 import { BlogType } from "@/components/dashboard_components/SettingComponents/blogcard";
+import { ContractType } from "@/components/dashboard_components/SettingComponents/contractTypeCard";
 import { CountryType } from "@/components/dashboard_components/SettingComponents/countrycard";
 import { ProductType } from "@/components/dashboard_components/SettingComponents/productcard";
+import { Proximity } from "@/components/dashboard_components/SettingComponents/proximityCard";
 import { VehicleType } from "@/components/dashboard_components/SettingComponents/vehiclecard";
 import { POST, PUT } from "@/constants/fetchConfig";
 import { PRODUCT_CONFIG_INPUTS } from "@/constants/templates";
@@ -25,26 +27,34 @@ const SettingsForm: React.FC = () => {
     selectedBlogType,
     selectedCountryType,
     selectedVehicleType,
+    selectedContractType,
+    selectedProximity,
   } = useSettings();
   const [isChanged, setIsChanged] = useState<boolean>(false);
   const [selectedType, setSelectedType] = useState<
-    ProductType | BlogType | CountryType | VehicleType | null
+    ProductType | BlogType | CountryType | VehicleType | ContractType | Proximity | null
   >(null);
 
   const wasChanged = () => {
     if (
-      (type === "product" &&
+      (type === "productType" &&
         (label !== selectedProductType?.label ||
           description !== selectedProductType?.description)) ||
-      (type === "blog" &&
+      (type === "blogType" &&
         (label !== selectedBlogType?.label ||
           description !== selectedBlogType.description)) ||
-      (type === "country" &&
+      (type === "countryType" &&
         (label !== selectedCountryType?.label ||
           description !== selectedCountryType.description)) ||
-      (type === "vehicle" &&
+      (type === "vehicleType" &&
         (label !== selectedVehicleType?.label ||
-          description !== selectedVehicleType.description))
+          description !== selectedVehicleType.description)) ||
+      (type === "contractType" &&
+        (label !== selectedContractType?.label ||
+          description !== selectedContractType.description)) ||
+      (type === "proximity" &&
+        (label !== selectedProximity?.label ||
+          description !== selectedProximity.description))
     ) {
       setIsChanged(true);
     } else {
@@ -65,22 +75,30 @@ const SettingsForm: React.FC = () => {
 
   useEffect(() => {
     if (isModify && type) {
-      if (type === "product" && selectedProductType) {
+      if (type === "productType" && selectedProductType) {
         setLabel(selectedProductType.label);
         setDescription(selectedProductType.description);
         setSelectedType(selectedProductType);
-      } else if (type === "blog" && selectedBlogType) {
+      } else if (type === "blogType" && selectedBlogType) {
         setLabel(selectedBlogType.label);
         setDescription(selectedBlogType.description);
         setSelectedType(selectedBlogType);
-      } else if (type === "country" && selectedCountryType) {
+      } else if (type === "countryType" && selectedCountryType) {
         setLabel(selectedCountryType.label);
         setDescription(selectedCountryType.description);
         setSelectedType(selectedCountryType);
-      } else if (type === "vehicle" && selectedVehicleType) {
+      } else if (type === "vehicleType" && selectedVehicleType) {
         setLabel(selectedVehicleType.label);
         setDescription(selectedVehicleType.description);
         setSelectedType(selectedVehicleType);
+      } else if (type === "contractType" && selectedContractType) {
+        setLabel(selectedContractType.label);
+        setDescription(selectedContractType.description);
+        setSelectedType(selectedContractType);
+      } else if (type === "proximity" && selectedProximity) {
+        setLabel(selectedProximity.label);
+        setDescription(selectedProximity.description);
+        setSelectedType(selectedProximity);
       }
     }
   }, [
@@ -113,7 +131,7 @@ const SettingsForm: React.FC = () => {
     try {
       var response;
       if (isModify === false) {
-        response = await POST(`/${type}Type/`, newType);
+        response = await POST(`/${type}/`, newType);
         router.back();
         Toast.fire({
           icon: "success",
@@ -122,7 +140,7 @@ const SettingsForm: React.FC = () => {
       } else {
         try {
           if (isChanged) {
-            response = await PUT(`/${type}Type/${selectedType?._id}`, newType);
+            response = await PUT(`/${type}/${selectedType?._id}`, newType);
             router.back();
             Toast.fire({
               icon: "success",

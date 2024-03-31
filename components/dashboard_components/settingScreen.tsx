@@ -5,6 +5,7 @@ import ProductCard, { ProductType } from "./SettingComponents/productcard";
 import CountryCard, { CountryType } from "./SettingComponents/countrycard";
 import BlogCard, { BlogType } from "./SettingComponents/blogcard";
 import ContractTypeCard from "./SettingComponents/contractTypeCard";
+import ProximityCard from "./SettingComponents/proximityCard";
 
 export const SettingScreen = () => {
   return (
@@ -21,7 +22,7 @@ export const SettingScreen = () => {
         </div>
         <div className="mt-4 flex flex-row">
           <ContractTypeCard />
-          <CountryCard />
+          <ProximityCard />
         </div>
       </div>
     </div>
