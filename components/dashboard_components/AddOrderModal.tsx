@@ -117,7 +117,10 @@ export const AddOrderModal: React.FC<AddOrderModalProps> = ({
                 response = await POST(`/commandes`, newOrder);
             } else {
                 if (!isChanged) {
-                    return alert("Values were not changed");
+                    return Toast.fire({
+                        icon: "error",
+                        title: `Les champs n'ont pas été modifiés`,
+                    });
                 }
                 /*                response = await fetch(`/commandes/${selectedOrder._id}`, {
                             method: 'PUT',

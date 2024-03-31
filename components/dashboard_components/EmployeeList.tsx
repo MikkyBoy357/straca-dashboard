@@ -13,6 +13,7 @@ export interface Employee {
     phone: string;
     title: string;
     address: string;
+    type: "employee";
 }
 
 export const EmployeeListComponent = () => {

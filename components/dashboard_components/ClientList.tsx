@@ -12,8 +12,9 @@ export interface Client {
     lastName: string;
     email: string;
     phone: string;
-    title: string;
     address: string;
+    company: string;
+    type: "client";
 }
 
 interface props{
@@ -143,7 +144,7 @@ export const ClientListComponent: React.FC<props> = ({setSelectedClient}) => {
                                                 <td className="py-2 px-4 border-b">{item.email}</td>
                                                 <td className="py-2 px-4 border-b">{item.phone}</td>
                                                 <td className="py-2 px-4 border-b flex justify-center">
-                                                    <div className={`px-4 py-2 rounded-3xl items-center justify-center text-center ${item.title === "ceo" ? 'bg-[#DCFCE7]' : "bg-[#FFEDD5]"} ${item.title === "ceo" ? 'text-[#166534]' : "text-[#9A3412]"}`}>{item.title}</div>
+                                                    <div className={`px-3 py-1 rounded-3xl items-center justify-center text-center ${item.company === "CASHLESS" ? 'bg-[#DCFCE7]' : "bg-[#FFEDD5]"} ${item.company === "CASHLESS" ? 'text-[#166534]' : "text-[#9A3412]"}`}>{item.company ?? "NULL"}</div>
                                                 </td>
                                                 <td className="py-2 px-4 border-b text-center">
                                                     {/* Add your action buttons or links here */}

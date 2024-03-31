@@ -1,4 +1,5 @@
 import { BlogType } from "@/components/dashboard_components/SettingComponents/blogcard";
+import { ContractType } from "@/components/dashboard_components/SettingComponents/contractTypeCard";
 import { CountryType } from "@/components/dashboard_components/SettingComponents/countrycard";
 import { ProductType } from "@/components/dashboard_components/SettingComponents/productcard";
 import { VehicleType } from "@/components/dashboard_components/SettingComponents/vehiclecard";
@@ -13,6 +14,8 @@ interface SettingsContextProps {
   setSelectedVehicleType: (item: VehicleType | null) => void;
   selectedCountryType: CountryType | null;
   setSelectedCountryType: (item: CountryType | null) => void;
+  selectedContractType: CountryType | null;
+  setSelectedContractType: (item: CountryType | null) => void;
 }
 
 const SettingsContext = createContext<SettingsContextProps | undefined>(
@@ -31,6 +34,8 @@ export const SettingsProvider: React.FC<{ children: ReactNode }> = ({
     useState<VehicleType | null>(null);
   const [selectedCountryType, setSelectedCountryType] =
     useState<CountryType | null>(null);
+  const [selectedContractType, setSelectedContractType] =
+    useState<ContractType | null>(null);
   return (
     <SettingsContext.Provider
       value={{
@@ -42,6 +47,8 @@ export const SettingsProvider: React.FC<{ children: ReactNode }> = ({
         setSelectedVehicleType,
         selectedCountryType,
         setSelectedCountryType,
+        selectedContractType,
+        setSelectedContractType,
       }}
     >
       {children}

@@ -104,8 +104,10 @@ const SettingsForm: React.FC = () => {
       description: description,
     };
     if (label.trim() === "" || description.trim() === "") {
-      alert("Please Insert all Fields");
-      return;
+      return Toast.fire({
+        icon: "error",
+        title: `Les champs doivent être remplis`,
+      });
     }
 
     try {

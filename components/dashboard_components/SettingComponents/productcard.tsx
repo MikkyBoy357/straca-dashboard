@@ -39,8 +39,13 @@ const {action, type} = router.query;
       const data: ProductType[] = response;
       setProductTypesData(data);
       setIsLoading(false);
-    } catch (error) {
-      alert(error);
+    } catch (error:any) {
+      const errorMessage=error.response.data.error.message;
+      console.log(errorMessage);
+      return Toast.fire({
+        icon: "error",
+        title: `Error: ${errorMessage}`,
+      });
     }
   }, [searchText]);
 
@@ -76,14 +81,11 @@ const {action, type} = router.query;
             <i className="fa-solid fa-plus ml-1"></i>
           </button>
         </div>
-        <div className="relative">
-          <div className="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
-            <i className="fa-solid fa-magnifying-glass"></i>
-          </div>
+        <div className="flex">
           <input
             type="search"
             id="default-search"
-            className="block w-full px-4 py-3 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-white focus:ring-blue-500 focus:border-blue-500 "
+            className="block w-full px-4 py-3 text-sm text-gray-900 border border-gray-300 rounded-lg bg-white focus:ring-blue-500 focus:border-blue-500 "
             placeholder="Recherche ..."
           />
         </div>

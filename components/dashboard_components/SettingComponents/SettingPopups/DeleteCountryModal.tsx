@@ -26,7 +26,7 @@ const DeleteCountryModal: React.FC<DeleteCountryModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-25 backdrop-blur-sm flex justify-center items-center">
+    <div className="fixed z-0 inset-0 bg-black bg-opacity-25 backdrop-blur-sm flex justify-center items-center">
       <div className="flex flex-col bg-white p-4 rounded-lg">
         <p className="text-gray-800 text-lg">{`Êtes vous sûr de vouloir supprimer cet élement?`}</p>
         <div className="flex justify-end mt-4">

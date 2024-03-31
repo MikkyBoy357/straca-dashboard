@@ -20,7 +20,7 @@ const JobForm: React.FC<Props> = ({ selectedJob }) => {
   const [location, setLocation] = useState("");
   const [contractType, setContractType] = useState("");
   const [description, setDescription] = useState("");
-console.log(`==>${selectedJob?.location}`)
+  console.log(`==>${selectedJob?.location}`)
   // Attention
   const [isChanged, setIsChanged] = useState(false);
   const [isModify, setIsModify] = useState(false);
@@ -86,7 +86,10 @@ console.log(`==>${selectedJob?.location}`)
         response = await POST(`/jobs`, newJob);
       } else {
         if (!isChanged) {
-          return alert("Values were not changed");
+          return Toast.fire({
+            icon: "error",
+            title: `Les champs n'ont pas été modifiés`,
+          });
         }
 
         response = await PUT(`/jobs/${selectedJob?._id}`, newJob);
