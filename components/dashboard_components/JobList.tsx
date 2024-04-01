@@ -4,14 +4,17 @@ import { BaseUrl } from "@/constants/templates";
 import router, { useRouter } from "next/router";
 import { DELETE, GET } from "@/constants/fetchConfig";
 import DeleteCountryModal from "./SettingComponents/SettingPopups/DeleteCountryModal";
+import { ContractType } from "./SettingComponents/contractTypeCard";
+import { Proximity } from "./SettingComponents/proximityCard";
+import { getFormatedDate, htmlToPlainText } from "@/constants/markdownUtil";
 // import DeleteCountryModal from "./SettingComponents/SettingPopups/DeleteCountryModal";
 
 export interface Job {
   _id: string;
   post: string;
   salary: number;
-  location: string;
-  contractType: string;
+  proximity: Proximity;
+  contractType: ContractType;
   description: string;
   createdAt: string;
 }
@@ -149,50 +152,58 @@ export const JobListComponent: React.FC<Props> = ({ setSelectedJob }) => {
                     </tr>
                   </thead>
                   <tbody>
-                    {jobsData.map((item) => (
-                      <tr key={item._id}>
-                        <td className="py-2 px-4 border-b">{item.post}</td>
-                        <td className="py-2 px-4 border-b">
-                          {item.contractType}
-                        </td>
-                        <td className="py-2 px-4 border-b">{item.location}</td>
-                        <td className="py-2 px-4 border-b">
-                          {item.description}
-                        </td>
-                        <td className="py-2 px-4 border-b">{item.createdAt}</td>
-                        <td className="py-2 px-4 border-b flex justify-center">
-                          <div
-                            className={`px-4 py-2 rounded-3xl items-center justify-center text-center ${
-                              item.salary >= 1000000
-                                ? "bg-[#DCFCE7]"
-                                : "bg-[#FFEDD5]"
-                            } ${
-                              item.salary >= 1000000
-                                ? "text-[#166534]"
-                                : "text-[#9A3412]"
-                            }`}
-                          >
-                            {item.salary} fcfa
-                          </div>
-                        </td>
-                        <td className="py-2 px-4 border-b text-center">
-                          {/* Add your action buttons or links here */}
-                          <i
-                            onClick={() => {
-                              setItemId(item._id);
-                              toggleShowDeleteModal();
-                            }}
-                            className="fa-regular fa-trash-can text-red-600"
-                          ></i>
-                          <i
-                            onClick={() => {
-                              handleModify(item);
-                            }}
-                            className="ml-4 fa-regular fa-pen-to-square text-[#5C73DB]"
-                          ></i>
-                        </td>
-                      </tr>
-                    ))}
+                    {
+                      jobsData.map((item) => {
+                        // Description
+                        const plainDescription = htmlToPlainText(item.description, { maxLines: 2, maxLength: 30 });
+
+                        // DateTime
+                        const formattedDateString = getFormatedDate(item.createdAt);
+
+                        return (
+                          <tr key={item._id}>
+                            <td className="py-2 px-4 border-b">{item.post}</td>
+                            <td className="py-2 px-4 border-b">
+                              {item.contractType.label}
+                            </td>
+                            <td className="py-2 px-4 border-b">{item.proximity.label}</td>
+                            <td className="py-2 px-4 border-b">
+                              {plainDescription}{plainDescription.length >= 30 ? "..." : ""}
+                            </td>
+                            <td className="py-2 px-4 border-b">{formattedDateString}</td>
+                            <td className="py-2 px-4 border-b flex justify-center">
+                              <div
+                                className={`px-4 py-2 rounded-3xl items-center justify-center text-center ${item.salary >= 1000000
+                                  ? "bg-[#DCFCE7]"
+                                  : "bg-[#FFEDD5]"
+                                  } ${item.salary >= 1000000
+                                    ? "text-[#166534]"
+                                    : "text-[#9A3412]"
+                                  }`}
+                              >
+                                {item.salary} fcfa
+                              </div>
+                            </td>
+                            <td className="py-2 px-4 border-b text-center">
+                              {/* Add your action buttons or links here */}
+                              <i
+                                onClick={() => {
+                                  setItemId(item._id);
+                                  toggleShowDeleteModal();
+                                }}
+                                className="fa-regular fa-trash-can text-red-600"
+                              ></i>
+                              <i
+                                onClick={() => {
+                                  handleModify(item);
+                                }}
+                                className="ml-4 fa-regular fa-pen-to-square text-[#5C73DB]"
+                              ></i>
+                            </td>
+                          </tr>
+                        )
+                      })
+                    }
                   </tbody>
                 </table>
               </div>

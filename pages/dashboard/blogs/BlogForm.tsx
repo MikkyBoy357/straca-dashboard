@@ -207,16 +207,16 @@ const BlogForm: React.FC<props> = ({ selectedBlog }) => {
                     className="w-full"
                   />
                 </div>
-                {isModify && selectedBlog?.image ? (
+                {(imageFile || (isModify && selectedBlog?.image)) ? (
                   <div className="flex flex-row items-center gap-3">
                     <img
-                      src={selectedBlog.image.toString()}
+                      src={imageFile ? URL.createObjectURL(imageFile) : (selectedBlog?.image ? selectedBlog?.image.toString() : '')}
                       alt="Selected Blog Image"
                       className="w-20 h-20 object-cover"
                     />
                     <div className="w-80 bg-white p-6 rounded-md shadow-md">
                       <label className="block text-gray-700 text-sm font-bold mb-2">
-                        Choose a file:
+                        Choisissez un image du couverture:
                       </label>
                       <input
                         type="file"
@@ -232,7 +232,7 @@ const BlogForm: React.FC<props> = ({ selectedBlog }) => {
                 ) : (
                   <div className="max-w-md mx-auto bg-white p-6 rounded-md shadow-md">
                     <label className="block text-gray-700 text-sm font-bold mb-2">
-                      Choose a file:
+                      Choisissez un image du couverture:
                     </label>
                     <input
                       type="file"

@@ -73,7 +73,7 @@ export const JOB_INPUTS: TemplateInput[] = [
     },
     {
         id: "location",
-        label: "Prosimité",
+        label: "Proximité",
         placeholder: "Benin",
         type: "text",
     },

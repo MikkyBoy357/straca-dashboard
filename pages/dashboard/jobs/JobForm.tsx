@@ -1,6 +1,6 @@
 import { renderInputField } from "@/components/InputComponents/InputComponents";
 import { Job } from "@/components/dashboard_components/JobList";
-import { POST, PUT } from "@/constants/fetchConfig";
+import { GET, POST, PUT } from "@/constants/fetchConfig";
 import { JOB_INPUTS } from "@/constants/templates";
 import { Toast } from "@/constants/toastConfig";
 import router from "next/router";
@@ -9,6 +9,9 @@ import React, { useEffect, useState } from "react";
 const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
 import "react-quill/dist/quill.snow.css";
 import dynamic from "next/dynamic";
+import TypedDropdown from "@/components/InputComponents/TypedDropDown";
+import { Proximity } from "@/components/dashboard_components/SettingComponents/proximityCard";
+import { ContractType } from "@/components/dashboard_components/SettingComponents/contractTypeCard";
 
 interface Props {
   selectedJob: Job | null;
@@ -17,10 +20,15 @@ interface Props {
 const JobForm: React.FC<Props> = ({ selectedJob }) => {
   const [post, setPost] = useState("");
   const [salary, setSalary] = useState("");
-  const [location, setLocation] = useState("");
-  const [contractType, setContractType] = useState("");
+  const [proximity, setLocation] = useState<Proximity | null>(null);
+  const [contractType, setContractType] = useState<ContractType | null>(null);
   const [description, setDescription] = useState("");
-  console.log(`==>${selectedJob?.location}`)
+  console.log(`==>${selectedJob?.proximity}`)
+
+  // Dropdown data
+  const [proximityList, setProximityList] = useState<Proximity[]>([]);
+  const [contractTypeList, setContractTypeList] = useState<ContractType[]>([]);
+
   // Attention
   const [isChanged, setIsChanged] = useState(false);
   const [isModify, setIsModify] = useState(false);
@@ -28,8 +36,8 @@ const JobForm: React.FC<Props> = ({ selectedJob }) => {
     if (
       post !== selectedJob?.post ||
       salary !== selectedJob?.salary.toString() ||
-      location !== selectedJob?.location ||
-      contractType !== selectedJob?.contractType ||
+      proximity?._id !== selectedJob?.proximity._id ||
+      contractType?._id !== selectedJob?.contractType._id ||
       description !== selectedJob?.description
     ) {
       setIsChanged(true);
@@ -45,8 +53,8 @@ const JobForm: React.FC<Props> = ({ selectedJob }) => {
     if (isModify) {
       setPost(selectedJob?.post ?? "");
       setSalary(selectedJob?.salary.toString() ?? "");
-      setLocation(selectedJob?.location ?? "");
-      setContractType(selectedJob?.contractType ?? "");
+      setLocation(selectedJob?.proximity!);
+      setContractType(selectedJob?.contractType!);
       setDescription(selectedJob?.description ?? "");
     }
   }, [isModify]);
@@ -55,27 +63,32 @@ const JobForm: React.FC<Props> = ({ selectedJob }) => {
     if (isModify) {
       wasChanged();
     }
-  }, [post, salary, location, contractType, description]);
+  }, [post, salary, proximity, contractType, description]);
 
   // Function to add job
   const addJob = async () => {
     try {
+      console.log(proximity);
       const newJob = {
         post: post,
         salary: Number(salary),
-        location: location,
-        contractType: contractType,
+        proximity: proximity?._id,
+        contractType: contractType?._id,
         description: description,
         status: "test",
       };
 
+      console.log("st.")
+      console.log(newJob)
+      console.log("st.")
+
       // Perform validation to check if all variables are not empty
       if (
-        post.trim() === "" ||
-        salary?.trim() === "" ||
-        location?.trim() === "" ||
-        contractType?.trim() === "" ||
-        description.trim() === ""
+        !post.trim() ||
+        !salary?.trim() ||
+        !proximity?._id ||
+        !contractType?._id ||
+        !description.trim()
       ) {
         alert("Please fill in all fields.");
         return;
@@ -120,6 +133,34 @@ const JobForm: React.FC<Props> = ({ selectedJob }) => {
   console.log(isModify);
   console.log(selectedJob);
 
+  // Dropdown data fetch
+  useEffect(() => {
+    const fetchProximityList = async () => {
+      try {
+        const response = await GET("/proximity");
+        const data: Proximity[] = response;
+        setProximityList(data);
+        console.log(proximityList);
+      } catch (error) {
+        console.error("Error fetching proximity list:", error);
+      }
+    };
+
+    const fetchContractTypeList = async () => {
+      try {
+        const response = await GET("/contractType");
+        const data: ContractType[] = response;
+        setContractTypeList(data);
+        console.log(contractTypeList);
+      } catch (error) {
+        console.error("Error fetching contractType list:", error);
+      }
+    };
+
+    fetchProximityList();
+    fetchContractTypeList();
+  }, []);
+
   return (
     <div className="bg-white h-full pl-5 pr-16 pt-12 flex flex-col text-black">
       <div className="flex flex-row justify-start items-center">
@@ -155,12 +196,35 @@ const JobForm: React.FC<Props> = ({ selectedJob }) => {
               )}
             </div>
             <div className="flex w-full justify-between items-start gap-[12px] relative flex-[0_0_auto]">
-              {renderInputField(JOB_INPUTS[2], location, (e) =>
-                setLocation(e.target.value)
-              )}
-              {renderInputField(JOB_INPUTS[3], contractType, (e) =>
-                setContractType(e.target.value)
-              )}
+              <TypedDropdown<Proximity>
+                input={{
+                  id: JOB_INPUTS[2].id,
+                  label: JOB_INPUTS[2].label,
+                  placeholder: JOB_INPUTS[2].placeholder, // Optional placeholder
+                }}
+                value={proximity?.label}
+                selectList={proximityList}
+                handleSelect={(val) => {
+                  console.log("mik")
+                  console.log(val)
+                  console.log("mik")
+                  setLocation(val!);
+                }}
+                className=""
+              />
+              <TypedDropdown<ContractType>
+                input={{
+                  id: JOB_INPUTS[3].id,
+                  label: JOB_INPUTS[3].label,
+                  placeholder: JOB_INPUTS[3].placeholder, // Optional placeholder
+                }}
+                value={contractType?.label}
+                selectList={contractTypeList}
+                handleSelect={(val) => {
+                  setContractType(val!);
+                }}
+                className=""
+              />
             </div>
             <div className="flex w-full justify-between items-start gap-[12px] relative flex-[0_0_auto]">
               <div className="w-full">

@@ -7,6 +7,7 @@ import { DELETE, GET } from "@/constants/fetchConfig";
 import { User } from "./users-permissions/UsersPermissionsList";
 import DeleteCountryModal from "./SettingComponents/SettingPopups/DeleteCountryModal";
 import CustomLoader from "../CustomLoader";
+import { getFormatedDate, htmlToPlainText } from "@/constants/markdownUtil";
 // import DeleteCountryModal from "./SettingComponents/SettingPopups/DeleteCountryModal";
 
 export interface Blog {
@@ -23,7 +24,7 @@ interface props {
   setSelectedBlog: (item: Blog) => void;
 }
 
-export const BlogListComponent: React.FC<props> = ({setSelectedBlog}) => {
+export const BlogListComponent: React.FC<props> = ({ setSelectedBlog }) => {
   const [showGrid, setShowGrid] = useState(false);
 
   const router = useRouter();
@@ -141,16 +142,15 @@ export const BlogListComponent: React.FC<props> = ({setSelectedBlog}) => {
                 className="px-4 py-2 bg-slate-400 rounded-sm"
               >
                 <i
-                  className={`${showGrid ? "fa-solid" : "fa-brands"} ${
-                    showGrid ? "fa-list" : "fa-windows"
-                  } text-slate-800`}
+                  className={`${showGrid ? "fa-solid" : "fa-brands"} ${showGrid ? "fa-list" : "fa-windows"
+                    } text-slate-800`}
                 ></i>
               </button>
             </div>
           </div>
           {/* Table */}
 
-          {loading? (
+          {loading ? (
             <CustomLoader />
           ) : (
             <div className="flex flex-col rounded-[12px] border-blue-600">
@@ -180,57 +180,64 @@ export const BlogListComponent: React.FC<props> = ({setSelectedBlog}) => {
                         </tr>
                       </thead>
                       <tbody>
-                        {blogsData.map((item) => (
-                          <tr key={item._id}>
-                            <td className="py-2 px-4 border-b">{item.title}</td>
-                            <td className="py-2 px-4 border-b">
-                              {item.category}
-                            </td>
-                            <td className="py-2 px-4 border-b">
-                              {item.createdBy!.email}
-                            </td>
-                            <td className="py-2 px-4 border-b">
-                              <div></div>
-                              {item.description}
-                            </td>
-                            <td className="py-2 px-4 border-b">
-                              {item.createdAt}
-                            </td>
-                            <td className="py-2 px-4 border-b flex justify-center">
-                              <div
-                                className={`px-4 py-2 rounded-3xl items-center justify-center text-center ${
-                                  item.status.toLocaleLowerCase() ===
-                                  "published"
-                                    ? "bg-[#DCFCE7]"
-                                    : "bg-[#FFEDD5]"
-                                } ${
-                                  item.status.toLocaleLowerCase() ===
-                                  "published"
-                                    ? "text-[#166534]"
-                                    : "text-[#9A3412]"
-                                }`}
-                              >
-                                {item.status}
-                              </div>
-                            </td>
-                            <td className="py-2 px-4 border-b text-center">
-                              {/* Add your action buttons or links here */}
-                              <i
-                                onClick={() => {
-                                  setItemId(item._id);
-                                  toggleShowDeleteModal();
-                                }}
-                                className="fa-regular fa-trash-can text-red-600"
-                              ></i>
-                              <i
-                                onClick={() => {
-                                  handleModify(item);
-                                }}
-                                className="ml-4 fa-regular fa-pen-to-square text-[#5C73DB]"
-                              ></i>
-                            </td>
-                          </tr>
-                        ))}
+                        {
+                          blogsData.map((item) => {
+                            // Description
+                            const plainDescription = htmlToPlainText(item.description, { maxLines: 2, maxLength: 30 });
+
+                            // DateTime
+                            const formattedDateString = getFormatedDate(item.createdAt);
+
+                            return (
+                              <tr key={item._id}>
+                                <td className="py-2 px-4 border-b">{item.title}</td>
+                                <td className="py-2 px-4 border-b">
+                                  {item.category}
+                                </td>
+                                <td className="py-2 px-4 border-b">
+                                  {item.createdBy!.email}
+                                </td>
+                                <td className="py-2 px-4 border-b">
+                                  {plainDescription}{plainDescription.length >= 30 ? "..." : ""}
+                                </td>
+                                <td className="py-2 px-4 border-b">
+                                  {formattedDateString}
+                                </td>
+                                <td className="py-2 px-4 border-b flex justify-center">
+                                  <div
+                                    className={`px-4 py-2 rounded-3xl items-center justify-center text-center ${item.status.toLocaleLowerCase() ===
+                                      "published"
+                                      ? "bg-[#DCFCE7]"
+                                      : "bg-[#FFEDD5]"
+                                      } ${item.status.toLocaleLowerCase() ===
+                                        "published"
+                                        ? "text-[#166534]"
+                                        : "text-[#9A3412]"
+                                      }`}
+                                  >
+                                    {item.status}
+                                  </div>
+                                </td>
+                                <td className="py-2 px-4 border-b text-center">
+                                  {/* Add your action buttons or links here */}
+                                  <i
+                                    onClick={() => {
+                                      setItemId(item._id);
+                                      toggleShowDeleteModal();
+                                    }}
+                                    className="fa-regular fa-trash-can text-red-600"
+                                  ></i>
+                                  <i
+                                    onClick={() => {
+                                      handleModify(item);
+                                    }}
+                                    className="ml-4 fa-regular fa-pen-to-square text-[#5C73DB]"
+                                  ></i>
+                                </td>
+                              </tr>
+                            )
+                          })
+                        }
                       </tbody>
                     </table>
                   )}
