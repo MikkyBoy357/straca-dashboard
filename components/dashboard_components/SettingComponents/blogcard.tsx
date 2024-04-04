@@ -58,7 +58,7 @@ export const BlogCard: React.FC = ({ }) => {
       await DELETE(`/blogType/${itemId}`);
       Toast.fire({
         icon: "success",
-        title: "Blog Category Deleted Successfully",
+        title: "Catégorie de blog supprimée avec succès",
       });
       router.reload();
     } catch (error) {

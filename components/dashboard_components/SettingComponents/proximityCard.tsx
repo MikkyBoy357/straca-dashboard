@@ -58,7 +58,7 @@ export const ProximityCard: React.FC = ({ }) => {
       await DELETE(`/proximity/${itemId}`);
       Toast.fire({
         icon: "success",
-        title: "Proximité Category Deleted Successfully",
+        title: "Catégorie de proximité supprimée avec succès",
       });
       router.reload();
     } catch (error) {

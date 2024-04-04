@@ -61,7 +61,7 @@ const {action, type} = router.query;
     await DELETE(`/productType/${itemId}`);
     Toast.fire({
       icon: "success",
-      title: "Product Type Deleted Successfully",
+      title: "Type de produit supprimé avec succès",
     });
     router.reload();
   };

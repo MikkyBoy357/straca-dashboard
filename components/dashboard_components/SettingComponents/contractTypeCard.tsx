@@ -64,7 +64,7 @@ export const ContractTypeCard: React.FC = ({
         await DELETE(`/contractType/${itemId}`);
         Toast.fire({
             icon: "success",
-            title: "Contract Type Deleted Successfully",
+            title: "Type de contrat supprimé avec succès",
         });
         router.reload();
     };

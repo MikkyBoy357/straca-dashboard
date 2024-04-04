@@ -1,6 +1,7 @@
 import { renderInputField } from "@/components/InputComponents/InputComponents";
 import { POST } from "@/constants/fetchConfig";
 import { BaseUrl, LOGIN_INPUTS } from "@/constants/templates";
+import { Toast } from "@/constants/toastConfig";
 import { Loader2 } from "lucide-react";
 import { signIn } from "next-auth/react";
 import Image from "next/image";
@@ -28,7 +29,10 @@ const Login = () => {
 
       if (data.user.type !== "admin" && data.user.type !== "employee") {
         // Display alert dialog to the user when login fails
-        alert("Login failed. The user doesn't have correct access");
+        Toast.fire({
+          icon: "error",
+          title: `La connexion a échoué. cet utilisateur n'a pas un accès correct`,
+        });
       } else {
         const { token } = data;
         const { user } = data;
@@ -49,8 +53,11 @@ const Login = () => {
     } catch (error) {
       console.error("Error:", error);
       // Display alert dialog to the user when login fails
-      alert("Login failed. Please check your credentials and try again.");
-    } finally{
+      Toast.fire({
+        icon: "error",
+        title: `La connexion a échoué. Veuillez vérifier vos informations d'identification et réessayer.`,
+      });
+    } finally {
       setIsLoading(false);
     }
   }
@@ -159,7 +166,13 @@ const Login = () => {
                 type="submit"
                 className="w-full py-3 px-4 bg-[#3D75B0] text-white rounded-md hover:bg-blue-700"
               >
-                {isLoading ? <center><Loader2 className="animate-spin" size={20}/></center> : `Login`}
+                {isLoading ? (
+                  <center>
+                    <Loader2 className="animate-spin" size={20} />
+                  </center>
+                ) : (
+                  `Login`
+                )}
               </button>
             </div>
           </form>

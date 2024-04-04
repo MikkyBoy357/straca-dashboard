@@ -3,7 +3,7 @@ import React, {useCallback, useEffect, useMemo, useState} from 'react';
 import {useRouter} from "next/router";
 import {Permission, User} from "@/components/dashboard_components/users-permissions/UsersPermissionsList";
 import Modal from "@/components/Modal";
-import Select from "react-select";
+import Select from "react-select"
 import {Toast} from "@/constants/toastConfig";
 import {GET, PUT} from "@/constants/fetchConfig";
 
@@ -116,11 +116,7 @@ export const UpdateUserPermissionModal: React.FC<UpdateUserPermissionModalProps>
                 console.log("response",  response);
 
 
-/*                if (!response.ok) {
-                    const errorData = await response.json();
-                    alert(`Error => ${errorData.message}`)
-                    throw new Error(`Failed to update permissions`);
-                }*/
+
 
                 onClose();
                 Toast.fire({
@@ -152,7 +148,7 @@ export const UpdateUserPermissionModal: React.FC<UpdateUserPermissionModalProps>
                             setUserPermissionsData(prevState => {
                                 return permissionsData.filter((permission) => {
 
-                                    return e.some((userPermission) => {
+                                    return e.some((userPermission: any) => {
                                         return userPermission.value === permission._id
                                     });
                                 });

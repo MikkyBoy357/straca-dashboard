@@ -8,11 +8,13 @@ import { ADD_ORDER_INPUTS } from "@/constants/templates";
 import router from "next/router";
 import React, { useEffect, useState } from "react";
 import dynamic from "next/dynamic";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+
 const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
 import "react-quill/dist/quill.snow.css";
 
 const OrderForm = () => {
-  const [startDate, setStartDate] = useState("");
   const [productTypes, setProductTypes] = useState<ProductType[]>([]);
   const [vehicleTypes, setVehicleTypes] = useState<VehicleType[]>([]);
   const [clientsList, setClientsList] = useState<Client[]>([]);
@@ -99,8 +101,8 @@ const OrderForm = () => {
       flag: "🇹🇬",
     },
   ];
-
-  const [endDate, setEndDate] = useState("");
+  const [startDate, setStartDate] = useState(new Date());
+  const [endDate, setEndDate] = useState(new Date());
   const [weight, setWeight] = useState("");
   const [volume, setVolume] = useState("");
   const [price, setPrice] = useState("");
@@ -115,6 +117,14 @@ const OrderForm = () => {
   const [searchKeyword2, setSearchKeyword2] = useState("");
   const [lat2, setLat2] = useState("");
   const [lon2, setLon2] = useState("");
+  const handleStartDateChange = (date: any) => {
+    const isoDate = date.toISOString();
+    setStartDate(isoDate);
+  };
+  const handleEndDateChange = (date: any) => {
+    const isoDate = date.toISOString();
+    setEndDate(isoDate);
+  };
 
   // Helper function to generate arrow functions for setters
   const generateSetterFunction = (setter: any) => (e: any) =>
@@ -181,14 +191,11 @@ const OrderForm = () => {
             <div className="flex flex-col gap-5 items-center">
               <div className="flex w-full justify-between items-start gap-[18px] relative flex-[0_0_auto]">
                 <div className="w-[10%]">
-                  {renderInputField(
-                    ADD_ORDER_INPUTS[0],
-                    startDate,
-                    (e) => setStartDate(e.target.value),
-                    undefined,
-                    undefined,
-                    "w-full"
-                  )}
+                  <DatePicker
+                    selected={startDate}
+                    onChange={handleStartDateChange}
+                    dateFormat="dd/MM/yyyy"
+                  />
                 </div>
                 <div className="w-[30%]">
                   <DropdownComponent
@@ -226,15 +233,12 @@ const OrderForm = () => {
                 </div>
               </div>
               <div className="flex w-full justify-between items-start gap-[18px] relative flex-[0_0_auto]">
-                <div className="w-[50%] flex justify-start gap-14">
-                  {renderInputField(
-                    ADD_ORDER_INPUTS[3],
-                    endDate,
-                    (e) => setEndDate(e.target.value),
-                    undefined,
-                    undefined,
-                    "w-[20%]"
-                  )}
+                <div className="w-[50%] flex justify-start gap-12">
+                <DatePicker
+                    selected={endDate}
+                    onChange={handleEndDateChange}
+                    dateFormat="dd/MM/yyyy"
+                  />
                   {renderInputField(
                     ADD_ORDER_INPUTS[4],
                     weight,

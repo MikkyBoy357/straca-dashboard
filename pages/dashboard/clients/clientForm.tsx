@@ -110,11 +110,11 @@ const ClientForm: React.FC<Props> = ({ selectedClient }) => {
         response = await PUT(`/clients/${selectedClient?._id}`, newClient);
       }
 
-      console.log(`Client ${isModify ? "edited" : "added"} successfully!`);
+      console.log(`Client ${isModify ? "édité" : "ajouté"} avec succès!`);
       router.back();
       Toast.fire({
         icon: "success",
-        title: `Client ${isModify ? "edited" : "added"} successfully!`,
+        title: `Client ${isModify ? "édité" : "ajouté"} avec succès!`,
       });
     } catch (error: any) {
       const errorMessage = error.response.data.error.message;

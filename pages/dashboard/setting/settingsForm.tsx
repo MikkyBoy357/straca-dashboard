@@ -135,7 +135,7 @@ const SettingsForm: React.FC = () => {
         router.back();
         Toast.fire({
           icon: "success",
-          title: `${typeString} added successfully!`,
+          title: `${typeString} ajouté avec succès`,
         });
       } else {
         try {
@@ -144,18 +144,26 @@ const SettingsForm: React.FC = () => {
             router.back();
             Toast.fire({
               icon: "success",
-              title: `${typeString} Edited Successfully`,
+              title: `${typeString} édité avec succès`,
             });
           } else {
-            alert("You changed nothing");
+            Toast.fire({
+              icon: "error",
+              title: `Aucun champ modifié`,
+          });
           }
         } catch (error) {
-          alert(error);
+          Toast.fire({
+            icon: "error",
+            title: {error},
+          });
         }
       }
     } catch (error) {
-      alert(error);
-    }
+      Toast.fire({
+        icon: "error",
+        title: {error},
+      });    }
   };
 
   return (

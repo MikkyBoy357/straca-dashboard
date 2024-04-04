@@ -119,7 +119,10 @@ const BlogForm: React.FC<props> = ({ selectedBlog }) => {
         (imageFile === null && !isModify) ||
         description.trim() === ""
       ) {
-        alert("Please fill in all fields.");
+        Toast.fire({
+          icon: "error",
+          title: `Merci de remplir tous les champs`,
+      });
         return;
       }
 
@@ -139,15 +142,18 @@ const BlogForm: React.FC<props> = ({ selectedBlog }) => {
         console.log(response);
       }
 
-      console.log(`Blog ${isModify ? "edited" : "added"} successfully!`);
+      console.log(`Blog ${isModify ? "édité" : "ajouté"} avec succès!!`);
       router.back();
       Toast.fire({
         icon: "success",
-        title: `Blog ${isModify ? "edited" : "added"} successfully!`,
+        title: `Blog ${isModify ? "édité" : "ajouté"} avec succès!`,
       });
     } catch (error) {
       console.error("Error adding blog:", error);
-      alert(error);
+      Toast.fire({
+        icon: "error",
+        title: {error},
+    });
     } finally {
       if (isPublish) {
         setIsPublishing(false);

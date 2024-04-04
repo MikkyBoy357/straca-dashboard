@@ -106,11 +106,11 @@ const EmployeeForm: React.FC<Props> = ({ selectedEmployee }) => {
         );
       }
 
-      console.log(`Employee ${isModify ? "edited" : "added"} successfully!`);
+      console.log(`Employé ${isModify ? "édité" : "ajouté"} avec succès!`);
       router.back();
       Toast.fire({
         icon: "success",
-        title: `Employee ${isModify ? "edited" : "added"} successfully!`,
+        title: `Employé ${isModify ? "édité" : "ajouté"} avec succès!!`,
       });
     } catch (error) {
       return Toast.fire({

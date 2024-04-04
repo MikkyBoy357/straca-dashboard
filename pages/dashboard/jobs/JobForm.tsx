@@ -9,9 +9,9 @@ import React, { useEffect, useState } from "react";
 const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
 import "react-quill/dist/quill.snow.css";
 import dynamic from "next/dynamic";
-import TypedDropdown from "@/components/InputComponents/TypedDropDown";
 import { Proximity } from "@/components/dashboard_components/SettingComponents/proximityCard";
 import { ContractType } from "@/components/dashboard_components/SettingComponents/contractTypeCard";
+import TypedDropdown from "@/components/InputComponents/TypedDropdown";
 
 interface Props {
   selectedJob: Job | null;
@@ -90,7 +90,10 @@ const JobForm: React.FC<Props> = ({ selectedJob }) => {
         !contractType?._id ||
         !description.trim()
       ) {
-        alert("Please fill in all fields.");
+        Toast.fire({
+          icon: "error",
+          title: `Merci de remplir tous les champs`,
+      });
         return;
       }
 
@@ -108,24 +111,19 @@ const JobForm: React.FC<Props> = ({ selectedJob }) => {
         response = await PUT(`/jobs/${selectedJob?._id}`, newJob);
       }
 
-      console.log(`Job ${isModify ? "edited" : "added"} successfully!`);
+      console.log(`Job ${isModify ? "édité" : "ajouté"} avec succès!`);
       router.back();
       Toast.fire({
         icon: "success",
-        title: `Job ${isModify ? "edited" : "added"} successfully!`,
+        title: `Job ${isModify ? "édité" : "ajouté"} avec succès!`,
       });
-      // router.reload();
-
-      // Clear form fields after successful addition
-      // setPrice('');
-      // setTypeColis('');
-      // setTransportType('');
-      // setUnit('');
-      // setDescription('');
-      // setQuantity('');
+  
     } catch (error) {
       console.error("Error adding job:", error);
-      alert(error);
+      Toast.fire({
+        icon: "error",
+        title: {error},
+    });
       // Handle errors
     }
   };

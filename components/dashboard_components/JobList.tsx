@@ -7,6 +7,7 @@ import DeleteCountryModal from "./SettingComponents/SettingPopups/DeleteCountryM
 import { ContractType } from "./SettingComponents/contractTypeCard";
 import { Proximity } from "./SettingComponents/proximityCard";
 import { getFormatedDate, htmlToPlainText } from "@/constants/markdownUtil";
+import { Toast } from "@/constants/toastConfig";
 // import DeleteCountryModal from "./SettingComponents/SettingPopups/DeleteCountryModal";
 
 export interface Job {
@@ -63,12 +64,17 @@ export const JobListComponent: React.FC<Props> = ({ setSelectedJob }) => {
       console.log(`Deleting job with ID: ${itemId}`);
       const response = await DELETE(`/jobs/${itemId}`);
 
-      alert(`deleted successfully!`); // Show success alert
+      Toast.fire({
+        icon: "success",
+        title: `Supprimé avec succès`,
+    });// Show success alert
       router.reload(); // Refresh the page
     } catch (error) {
       console.error(`Error deleting:`, error);
-      alert(`Failed to delete`); // Show error alert
-    }
+      Toast.fire({
+        icon: "error",
+        title: `Échec de la suppression`,
+    });    }
   };
 
   // Function to fetch commandes data

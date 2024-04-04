@@ -56,7 +56,7 @@ export const VehicleCard: React.FC = ({ }) => {
     await DELETE(`/vehicleType/${itemId}`);
     Toast.fire({
       icon: "success",
-      title: "Vehicle Type Deleted Successfully",
+      title: "Type de véhicule supprimé avec succès",
     });
     router.reload();
   };

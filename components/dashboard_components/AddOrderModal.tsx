@@ -99,7 +99,10 @@ export const AddOrderModal: React.FC<AddOrderModalProps> = ({
             if (
                 status.trim() === ""
             ) {
-                alert("Please fill in all fields.");
+                Toast.fire({
+                    icon: "error",
+                    title: `Please fill in all Fields`,
+                });
                 return;
             }
 
@@ -122,45 +125,22 @@ export const AddOrderModal: React.FC<AddOrderModalProps> = ({
                         title: `Les champs n'ont pas été modifiés`,
                     });
                 }
-                /*                response = await fetch(`/commandes/${selectedOrder._id}`, {
-                            method: 'PUT',
-                            headers: {
-                                'Content-Type': 'application/json',
-                            },
-                            body: JSON.stringify(newOrder),
-                        });*/
+           
 
                 response = await PUT(`/commandes/${selectedOrder._id}`, newOrder);
             }
 
-            /*            if (!response.ok) {
-                      console.log(response)
-      
-                      const errorData = await response.json()
-                      alert(`Error adding pricing: ${errorData.message}`)
-      
-                      throw new Error('Failed to add order');
-                  }*/
+          
 
-            console.log(`Order ${isModify ? "edited" : "added"} successfully!`);
+            console.log(`commande ${isModify ? "édité" : "ajouté"} avec succès!`);
             onClose();
             Toast.fire({
                 icon: "success",
-                title: `Order ${isModify ? "edited" : "added"} successfully!`,
+                title: `commande ${isModify ? "édité" : "ajouté"} avec succès!`,
             });
             router.reload();
 
-            // Clear form fields after successful addition
-            // setTrackingId('');
-            // setTypeColis('');
-            // setTransportType('');
-            // setDescription('');
-            // setUnit('');
-            // setPays('')
-            // setQuantity('');
-            // setVille('')
-            // setStatus('')
-            // setSpecialNote('')
+            
         } catch (error) {
             console.error("Error adding pricing:", error);
             // Handle errors

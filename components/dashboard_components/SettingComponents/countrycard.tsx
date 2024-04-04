@@ -61,7 +61,7 @@ export const CountryCard: React.FC = ({
     await DELETE(`/countryType/${itemId}`);
     Toast.fire({
       icon: "success",
-      title: "Country Type Deleted Successfully",
+      title: "Type de pays supprimé avec succès",
     });
     router.reload();
   };

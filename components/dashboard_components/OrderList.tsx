@@ -43,44 +43,12 @@ export const OrderListComponent = () => {
         toggleShowModal()
     }
 
-    // const [employeesData, setEmployeesData] = useState<Commande[]>([
-    //     { _id: "0", operation: "Location 100 MAN", details: "...", contact: "Bob BOKO bob@straca.com", start: "23 decembre 2019", end: "08 JANVIER 2023", status: "En cours" },
-    //     { _id: "1", operation: "Achat 2000 T gravier", details: "...", contact: "Floyd ADEOTI floyd@straca.com", start: "07 mars 2021", end: "08 JANVIER 2023", status: "Liverer", },
-    //     { _id: "2", operation: "Huile HAFA", details: "...", contact: "Ronald BIGNON ronald@straca.com", start: "23 septembre 2022", end: "08 JANVIER 2023", status: "En cours", },
-    //     { _id: "3", operation: "Location Volvo 240", details: "...", contact: "Marvin AKO marvin@straca.com", start: "25 AOUT 2022", end: "08 JANVIER 2023", status: "Livrer", },
-    // ]);
+  
 
 
     const [commandesData, setCommandesData] = useState<Commande[]>([]);
 
-    const handleSetItemId = (id: string) => {
-        setItemId(id)
-    }
 
-    const handleDeleteItem = async () => {
-        try {
-            console.log(`Deleting employee with ID: ${itemId}`);
-            const response = await fetch(`${BaseUrl}/commandes/${itemId}`, {
-                method: 'DELETE',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-            });
-
-            if (!response.ok) {
-                const errorData = await response.json()
-                alert(`Error => ${errorData.message}`)
-                throw new Error(`Failed to delete`);
-            }
-
-            alert(`deleted successfully!`); // Show success alert
-            // window.location.reload(); // Refresh the page
-
-        } catch (error) {
-            console.error(`Error deleting:`, error);
-            alert(`Failed to delete`); // Show error alert
-        }
-    };
 
     // Function to fetch commandes data
     const fetchCommandesData = useCallback(async () => {

@@ -1,6 +1,7 @@
 
 import React, { useState, useEffect } from 'react'
 import { GET } from "@/constants/fetchConfig";
+import { Toast } from '@/constants/toastConfig';
 
 const DashboardScreen = () => {
     const [totalColis, setTotalColis] = useState(0)
@@ -24,7 +25,10 @@ const DashboardScreen = () => {
         } catch (error) {
             console.error('Error fetching data:', error);
             // Display an alert dialog for the error
-            alert('Failed to fetch data. Please try again.');
+            Toast.fire({
+                icon: "error",
+                title: `Failed to Fetch Data. Please try again`,
+            });
         }
     };
 

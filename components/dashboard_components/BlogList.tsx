@@ -8,6 +8,7 @@ import { User } from "./users-permissions/UsersPermissionsList";
 import DeleteCountryModal from "./SettingComponents/SettingPopups/DeleteCountryModal";
 import CustomLoader from "../CustomLoader";
 import { getFormatedDate, htmlToPlainText } from "@/constants/markdownUtil";
+import { Toast } from "@/constants/toastConfig";
 // import DeleteCountryModal from "./SettingComponents/SettingPopups/DeleteCountryModal";
 
 export interface Blog {
@@ -58,20 +59,23 @@ export const BlogListComponent: React.FC<props> = ({ setSelectedBlog }) => {
 
   const [itemId, setItemId] = useState("");
 
-  const handleSetItemId = (id: string) => {
-    setItemId(id);
-  };
 
   const handleDeleteItem = async () => {
     try {
       console.log(`Deleting employee with ID: ${itemId}`);
       const response = await DELETE(`/blogs/${itemId}`);
 
-      alert(`deleted successfully!`);
+      Toast.fire({
+        icon: "success",
+        title: `Supprimé avec succès`,
+    });
       router.reload();
     } catch (error) {
       console.error(`Error deleting:`, error);
-      alert(`Failed to delete`); // Show error alert
+      Toast.fire({
+        icon: "error",
+        title: `Échec de la suppression`,
+    });
     }
   };
 
@@ -86,6 +90,10 @@ export const BlogListComponent: React.FC<props> = ({ setSelectedBlog }) => {
       // Set the fetched data into state
       setBlogsData(data);
     } catch (error) {
+      Toast.fire({
+        icon: "error",
+        title: {error},
+      });
       console.error("Error fetching data:", error);
       // Handle errors
     }
