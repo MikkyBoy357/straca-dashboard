@@ -74,6 +74,7 @@ const BlogForm: React.FC<props> = ({ selectedBlog }) => {
   useEffect(() => {
     if (isModify === true) {
       setTitle(selectedBlog?.title ?? "");
+      console.log(`selblog==>${selectedBlog?.description}`);
       // setImageFile(selectedBlog?.image ?? null);
       setCategory(selectedBlog?.category ?? "");
       setDescription(selectedBlog?.description ?? "");
@@ -84,7 +85,6 @@ const BlogForm: React.FC<props> = ({ selectedBlog }) => {
 
   const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
-
     if (file) {
       setImageFile(file);
     }

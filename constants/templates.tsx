@@ -58,6 +58,40 @@ export const BLOG_INPUTS: TemplateInput[] = [
     },
 ];
 
+
+export const TRACKING_INPUT: TemplateInput[] = [
+    {
+        id: "name",
+        label: "Nom",
+        placeholder: "John Doe",
+        type: "text",
+    },
+    {
+        id: "brand",
+        label: "Marque",
+        placeholder: "Nissan",
+        type: "text",
+    },
+    {
+        id: "type",
+        label: "Type",
+        placeholder: "Truck,Ship.....",
+        type: "text",
+    },
+    {
+        id: "orderId",
+        label: "Commande Id",
+        placeholder: "",
+        type: "text",
+    },
+    {
+        id: "registrationNumber",
+        label: "Numéro d'enregistrement",
+        placeholder: "",
+        type: "text",
+    },
+];
+
 export const JOB_INPUTS: TemplateInput[] = [
     {
         id: "post",

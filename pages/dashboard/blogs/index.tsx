@@ -15,9 +15,9 @@ const BlogsPage = () => {
   return (
     <>
       {action === 'new' || action === "edit" ? (
-        <BlogForm selectedBlog={selectedBlog}/> // Render JobForm if action is "new"
+        <BlogForm selectedBlog={selectedBlog}/> 
       ) : (
-        <BlogListComponent setSelectedBlog={setSelectedBlog}/> // Render JobListComponent otherwise
+        <BlogListComponent setSelectedBlog={setSelectedBlog}/> 
       )}
     </>
   )

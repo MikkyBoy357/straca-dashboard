@@ -40,11 +40,11 @@ export const SIDEBAR_ITEMS: any = [
         label: "Offres d’emplois",
         url: "/dashboard/jobs",
     },
-    // {
-    //     id: "profile",
-    //     label: "Profile",
-    //     url: "/dashboard/profile",
-    // },
+    {
+        id: "tracking",
+        label: "Gestion Flotte et Tracking",
+        url: "/dashboard/tracking",
+    },
     {
         id: "setting",
         label: "Paramètres",
