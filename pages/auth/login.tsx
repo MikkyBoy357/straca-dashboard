@@ -4,14 +4,9 @@ import { BaseUrl, LOGIN_INPUTS } from "@/constants/templates";
 import { Toast } from "@/constants/toastConfig";
 import { Loader2 } from "lucide-react";
 import { signIn } from "next-auth/react";
-import Image from "next/image";
-import { useSearchParams } from "next/navigation";
-import router from "next/router";
-import React, { useMemo, useState } from "react";
+import React, { useState } from "react";
 
 const Login = () => {
-  const searchParams = useSearchParams();
-
   const [email, setEmail] = useState("");
   const [pass, setPass] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -183,7 +178,7 @@ const Login = () => {
         className="w-1/2 bg-cover bg-center"
         style={{
           backgroundImage:
-            "url(https://s3-alpha-sig.figma.com/img/3dea/fa45/29636683ee34027e975f74ede6fc95dd?Expires=1711324800&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=LFnO~bn5c-Cl~hqRQvqEDotrywGVACbPf8lhW3W7E0mC2FMA6T6Z8CSHF2Ixnjd1HdAmLFYFKK4emt058FOWgwTuieTPlSMzeLz3nLTH1ykCCMUSv~z0xmZgUBYTA4AFcEXccuOmcnT8TCM-mxL3wAdkANkb78Eu1d2MMnIKOJzuC28iAWoTjZBXQ~ZZcyyzu8iM3HYjH5OmmbZwCrDMKG15229BaE7jFeaVOmsHxU8CQik78wHuZp1QLmb7-Ac8fQR5ybpq3uz5nntQi1As2eAel5Fpc8t-Clz35lfVwXvgdZuBE~TgSTldE0tyQp5iY0~AvdE9NxsrPSho8~AFQQ__)",
+            "url(https://firebasestorage.googleapis.com/v0/b/flash-chat-3a9a7.appspot.com/o/Rectangle%2018195.png?alt=media&token=5b3b543e-bdeb-49a9-8fb2-907ef2b46dee)",
         }}
       >
         {/* Add optional content for the background section */}
